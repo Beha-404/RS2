@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("EasyPC.Services")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+b048d82df2a70d7102f24eefa8db2394afa4c86a")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+aab73093e4da06aabe64e6a6fc213a9ee9535c31")]
 [assembly: System.Reflection.AssemblyProductAttribute("EasyPC.Services")]
 [assembly: System.Reflection.AssemblyTitleAttribute("EasyPC.Services")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
