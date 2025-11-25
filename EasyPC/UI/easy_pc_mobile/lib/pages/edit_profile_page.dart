@@ -457,9 +457,25 @@ class _EditProfilePageState extends State<EditProfilePage> {
       address: nullIfEmpty(_addressCtrl.text),
     );
     try {
+      final userProvider = Provider.of<UserProvider>(context, listen: false);
+      final username = userProvider.user?.username;
+      final password = userProvider.password;
+
+      if (username == null || password == null) {
+        messenger.showSnackBar(
+          const SnackBar(
+            content: Text('Authentication required. Please log in again.'),
+            backgroundColor: Colors.red,
+          ),
+        );
+        return;
+      }
+
       final response = await const UserService().updateUser(
         user: updatedUser,
         profilePicture: _pickedImage,
+        username: username,
+        password: password,
       );
 
       if (!mounted) return;

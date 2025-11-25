@@ -239,17 +239,35 @@ class _RatePcDialogContentState extends State<_RatePcDialogContent> {
       return;
     }
 
+    final username = userProvider.user?.username;
+    final password = userProvider.password;
+
+    if (username == null || password == null) {
+      Navigator.pop(context);
+      ScaffoldMessenger.of(widget.parentContext).showSnackBar(
+        const SnackBar(
+          content: Text('Authentication required. Please log in again.'),
+          backgroundColor: Colors.red,
+        ),
+      );
+      return;
+    }
+
     try {
       if (widget.existingRatingId != null) {
         await RatingService().update(
           id: widget.existingRatingId!,
           ratingValue: _selectedRating,
+          username: username,
+          password: password,
         );
       } else {
         await RatingService().insert(
           userId: userProvider.user!.id!,
           pcId: widget.pc.id!,
           ratingValue: _selectedRating,
+          username: username,
+          password: password,
         );
       }
 

@@ -33,10 +33,29 @@ class _OrderHistoryPageState extends State<OrderHistoryPage> {
       return;
     }
 
+    final username = userProvider.user?.username;
+    final password = userProvider.password;
+
+    if (username == null || password == null) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('Authentication required. Please log in again.'),
+            backgroundColor: Colors.red,
+          ),
+        );
+      }
+      return;
+    }
+
     setState(() => _loading = true);
 
     try {
-      final orders = await OrderService().getUserOrders(userProvider.user!.id!);
+      final orders = await OrderService().getUserOrders(
+        userProvider.user!.id!,
+        username: username,
+        password: password,
+      );
       setState(() => _orders = orders);
     } catch (e) {
       if (mounted) {

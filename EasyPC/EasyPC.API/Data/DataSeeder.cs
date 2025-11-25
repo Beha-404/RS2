@@ -59,6 +59,22 @@ namespace EasyPC.API.Data
         {
             var users = new List<User>();
 
+            var (superAdminHash, superAdminSalt) = GenerateHash("superadmin123");
+            users.Add(new User
+            {
+                Username = "superadmin",
+                Password = "superadmin123",
+                Hash = superAdminHash,
+                Salt = superAdminSalt,
+                FirstName = "Super",
+                LastName = "Admin",
+                Email = "superadmin@easypc.com",
+                Role = UserRole.SuperAdmin,
+                City = "Sarajevo",
+                State = "FBiH",
+                Country = "Bosnia and Herzegovina"
+            });
+
             var (adminHash, adminSalt) = GenerateHash("admin123");
             users.Add(new User
             {
@@ -120,44 +136,44 @@ namespace EasyPC.API.Data
 
             manufacturers["CPU"] = new List<Manufacturer>
             {
-                new Manufacturer { Name = "Intel", ComponentType = "CPU", StateMachine = "draft" },
-                new Manufacturer { Name = "AMD", ComponentType = "CPU", StateMachine = "draft" },
-                new Manufacturer { Name = "Apple", ComponentType = "CPU", StateMachine = "draft" }
+                new Manufacturer { Name = "Intel", ComponentType = "CPU" },
+                new Manufacturer { Name = "AMD", ComponentType = "CPU" },
+                new Manufacturer { Name = "Apple", ComponentType = "CPU" }
             };
 
             manufacturers["RAM"] = new List<Manufacturer>
             {
-                new Manufacturer { Name = "Corsair", ComponentType = "RAM", StateMachine = "hidden" },
-                new Manufacturer { Name = "G.Skill", ComponentType = "RAM", StateMachine = "hidden" },
-                new Manufacturer { Name = "Kingston", ComponentType = "RAM", StateMachine = "hidden" }
+                new Manufacturer { Name = "Corsair", ComponentType = "RAM" },
+                new Manufacturer { Name = "G.Skill", ComponentType = "RAM" },
+                new Manufacturer { Name = "Kingston", ComponentType = "RAM" }
             };
 
             manufacturers["GPU"] = new List<Manufacturer>
             {
-                new Manufacturer { Name = "NVIDIA", ComponentType = "GPU", StateMachine = "active" },
-                new Manufacturer { Name = "AMD Radeon", ComponentType = "GPU", StateMachine = "active" },
-                new Manufacturer { Name = "Intel", ComponentType = "GPU", StateMachine = "active" }
+                new Manufacturer { Name = "NVIDIA", ComponentType = "GPU" },
+                new Manufacturer { Name = "AMD Radeon", ComponentType = "GPU" },
+                new Manufacturer { Name = "Intel", ComponentType = "GPU" }
             };
 
             manufacturers["MOTHERBOARD"] = new List<Manufacturer>
             {
-                new Manufacturer { Name = "ASUS", ComponentType = "MOTHERBOARD", StateMachine = "draft" },
-                new Manufacturer { Name = "MSI", ComponentType = "MOTHERBOARD", StateMachine = "draft" },
-                new Manufacturer { Name = "GIGABYTE", ComponentType = "MOTHERBOARD", StateMachine = "draft" }
+                new Manufacturer { Name = "ASUS", ComponentType = "MOTHERBOARD" },
+                new Manufacturer { Name = "MSI", ComponentType = "MOTHERBOARD" },
+                new Manufacturer { Name = "GIGABYTE", ComponentType = "MOTHERBOARD" }
             };
 
             manufacturers["CASE"] = new List<Manufacturer>
             {
-                new Manufacturer { Name = "NZXT", ComponentType = "CASE", StateMachine = "active" },
-                new Manufacturer { Name = "Corsair Cases", ComponentType = "CASE", StateMachine = "active" },
-                new Manufacturer { Name = "Phanteks", ComponentType = "CASE", StateMachine = "active" }
+                new Manufacturer { Name = "NZXT", ComponentType = "CASE" },
+                new Manufacturer { Name = "Corsair Cases", ComponentType = "CASE" },
+                new Manufacturer { Name = "Phanteks", ComponentType = "CASE" }
             };
 
             manufacturers["PSU"] = new List<Manufacturer>
             {
-                new Manufacturer { Name = "Corsair PSU", ComponentType = "PSU", StateMachine = "hidden" },
-                new Manufacturer { Name = "EVGA", ComponentType = "PSU", StateMachine = "draft" },
-                new Manufacturer { Name = "Seasonic", ComponentType = "PSU", StateMachine = "draft" }
+                new Manufacturer { Name = "Corsair PSU", ComponentType = "PSU" },
+                new Manufacturer { Name = "EVGA", ComponentType = "PSU" },
+                new Manufacturer { Name = "Seasonic", ComponentType = "PSU" }
             };
 
             foreach (var category in manufacturers.Values)

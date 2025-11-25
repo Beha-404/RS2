@@ -7,7 +7,6 @@ using EasyPC.Services.Interfaces;
 using EasyPC.Services.StateMachine.CaseStateMachine;
 using EasyPC.Services.StateMachine.GraphicsCard;
 using EasyPC.Services.StateMachine.GraphicsCardStateMachine;
-using EasyPC.Services.StateMachine.ManufacturerStateMachine;
 using EasyPC.Services.StateMachine.MotherboardStateMachine;
 using EasyPC.Services.StateMachine.PcStateMachine;
 using EasyPC.Services.StateMachine.PowerSupplyStateMachine;
@@ -71,7 +70,10 @@ builder.Services.AddSwaggerGen(c =>
 });
 
 builder.Services.AddDbContext<DatabaseContext>(options =>
-    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+{
+    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
+    options.ConfigureWarnings(w => w.Ignore(Microsoft.EntityFrameworkCore.Diagnostics.RelationalEventId.PendingModelChangesWarning));
+});
 
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddMemoryCache();
@@ -133,12 +135,6 @@ builder.Services.AddTransient<DraftPowerSupplyStateMachine>();
 builder.Services.AddTransient<ActivePowerSupplyStateMachine>();
 builder.Services.AddTransient<HiddenPowerSupplyStateMachine>();
 builder.Services.AddTransient<BasePowerSupplyStateMachine>();
-
-builder.Services.AddTransient<InitialManufacturerStateMachine>();
-builder.Services.AddTransient<DraftManufacturerStateMachine>();
-builder.Services.AddTransient<ActiveManufacturerStateMachine>();
-builder.Services.AddTransient<HiddenManufacturerStateMachine>();
-builder.Services.AddTransient<BaseManufacturerStateMachine>();
 
 builder.Services.AddTransient<InitialPcStateMachine>();
 builder.Services.AddTransient<DraftPcStateMachine>();

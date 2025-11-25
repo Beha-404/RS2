@@ -26,14 +26,28 @@ class UserService {
         body: jsonEncode({'username': username, 'password': password}),
       );
     } catch (e) {
-      throw Exception('Error occurred while logging in: $e');
+      throw Exception('Network error. Please check your connection.');
     }
 
     if (resp.statusCode == 200 && resp.body.isNotEmpty) {
       final data = jsonDecode(resp.body) as Map<String, dynamic>;
       return User.fromJson(data);
+    } else if (resp.statusCode == 401) {
+      try {
+        final error = jsonDecode(resp.body) as Map<String, dynamic>;
+        throw Exception(error['message'] ?? 'Invalid username or password');
+      } catch (_) {
+        throw Exception('Invalid username or password');
+      }
+    } else if (resp.statusCode == 400) {
+      try {
+        final error = jsonDecode(resp.body) as Map<String, dynamic>;
+        throw Exception(error['message'] ?? 'Invalid request');
+      } catch (_) {
+        throw Exception('Invalid request');
+      }
     } else {
-      throw Exception('Login failed: ${resp.body}');
+      throw Exception('Login failed. Please try again later.');
     }
   }
 
@@ -132,28 +146,45 @@ class UserService {
     }
   }
 
-  Future<List<User>> searchUsers({
+  Future<Map<String, dynamic>> searchUsers({
     String? username,
     String? email,
     String? firstName,
     String? lastName,
+    int? page,
+    int? pageSize,
+    required String authUsername,
+    required String authPassword,
   }) async {
     final queryParams = <String, String>{};
     if (username != null && username.isNotEmpty) queryParams['Username'] = username;
     if (email != null && email.isNotEmpty) queryParams['Email'] = email;
     if (firstName != null && firstName.isNotEmpty) queryParams['FirstName'] = firstName;
     if (lastName != null && lastName.isNotEmpty) queryParams['LastName'] = lastName;
+    if (page != null) queryParams['Page'] = page.toString();
+    if (pageSize != null) queryParams['PageSize'] = pageSize.toString();
 
     final uri = Uri.parse('$apiBaseUrl/api/User/get').replace(queryParameters: queryParams);
+    final credentials = base64Encode(utf8.encode('$authUsername:$authPassword'));
 
-    final resp = await http.get(uri, headers: {'Accept': 'application/json'});
+    final resp = await http.get(uri, headers: {
+      'Accept': 'application/json',
+      'Authorization': 'Basic $credentials',
+    });
 
     if (resp.statusCode >= 200 && resp.statusCode < 300 && resp.body.isNotEmpty) {
-      final decoded = jsonDecode(resp.body);
-      if (decoded is List) {
-        return decoded.map((json) => User.fromJson(json as Map<String, dynamic>)).toList();
-      }
-      throw Exception('Unexpected response shape for GET /api/User/get');
+      final decoded = jsonDecode(resp.body) as Map<String, dynamic>;
+      
+      // Backend now returns PagedResult with Items and TotalCount
+      final List<dynamic> items = decoded['items'] ?? [];
+      final int totalCount = decoded['totalCount'] ?? 0;
+      
+      final users = items.map((json) => User.fromJson(json as Map<String, dynamic>)).toList();
+      
+      return {
+        'users': users,
+        'totalCount': totalCount,
+      };
     }
     throw Exception('Search users failed (${resp.statusCode}): ${resp.body}');
   }

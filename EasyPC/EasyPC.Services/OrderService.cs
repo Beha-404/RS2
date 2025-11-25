@@ -1,4 +1,5 @@
-﻿using EasyPC.Model.Requests.OrderRequests;
+﻿using EasyPC.Model;
+using EasyPC.Model.Requests.OrderRequests;
 using EasyPC.Model.SearchObjects;
 using EasyPC.Model.Messages;
 using EasyPC.Services.Database;
@@ -32,7 +33,7 @@ namespace EasyPC.Services
             return true;
         }
 
-        public PagedResult<Model.Order> Get(OrderSearchObjects searchObject)
+        public Model.PagedResult<Model.Order> Get(OrderSearchObjects searchObject)
         {
             var query = _context.Orders
                 .Include(o => o.OrderDetails)
@@ -60,7 +61,7 @@ namespace EasyPC.Services
 
             if(searchObject == null)
             {
-                return new PagedResult<Model.Order>
+                return new Model.PagedResult<Model.Order>
                 {
                     Items = _mapper.Map<List<Model.Order>>(query.ToList()),
                     TotalCount = query.Count(),
@@ -83,7 +84,7 @@ namespace EasyPC.Services
                     .Take(searchObject.PageSize.Value);
             }
 
-            return new PagedResult<Model.Order>
+            return new Model.PagedResult<Model.Order>
             {
                 Items = _mapper.Map<List<Model.Order>>(query.ToList()),
                 TotalCount = totalCount,
@@ -126,7 +127,7 @@ namespace EasyPC.Services
             if(insert == null)
                 return null;
 
-            var order = new Order
+            var order = new Database.Order
             {
                 OrderDate = DateTime.Now,
                 PaymentMethod = insert.PaymentMethod,

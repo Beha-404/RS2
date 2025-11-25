@@ -50,12 +50,6 @@ class ManufacturerService {
     }
   }
 
-  Future<bool> hide(int id) async {
-    final uri = Uri.parse('$apiBaseUrl/api/manufacturer/hide/$id');
-    final response = await http.put(uri);
-    return response.statusCode == 200;
-  }
-
   Future<Manufacturer?> insert(Manufacturer manufacturer) async {
     final uri = Uri.parse('$apiBaseUrl/api/manufacturer/insert');
     final response = await http.post(
@@ -85,42 +79,6 @@ class ManufacturerService {
       return Manufacturer.fromJson(json);
     } else {
       throw Exception('Failed to update manufacturer');
-    }
-  }
-
-  Future<Manufacturer?> activate(int id) async {
-    final uri = Uri.parse('$apiBaseUrl/api/manufacturer/activate/$id');
-    final response = await http.put(uri);
-    
-    if (response.statusCode == 200) {
-      final json = jsonDecode(response.body);
-      return Manufacturer.fromJson(json);
-    } else {
-      return null;
-    }
-  }
-
-  Future<Manufacturer?> edit(int id) async {
-    final uri = Uri.parse('$apiBaseUrl/api/manufacturer/edit/$id');
-    final response = await http.put(uri);
-    
-    if (response.statusCode == 200) {
-      final json = jsonDecode(response.body);
-      return Manufacturer.fromJson(json);
-    } else {
-      return null;
-    }
-  }
-
-  Future<List<String>> getAllowedActions(int id) async {
-    final uri = Uri.parse('$apiBaseUrl/api/manufacturer/allowedActions/$id');
-    final response = await http.get(uri);
-    
-    if (response.statusCode == 200) {
-      final List<dynamic> json = jsonDecode(response.body);
-      return json.map((e) => e.toString()).toList();
-    } else {
-      return [];
     }
   }
 }

@@ -1,10 +1,16 @@
 import 'dart:convert';
 import 'package:desktop/config/config.dart';
 import 'package:desktop/models/order.dart';
+import 'package:desktop/providers/user_provider.dart';
+import 'package:desktop/utils/auth_helper.dart';
 import 'package:http/http.dart' as http;
 
 class OrderService {
-  const OrderService();
+  final UserProvider? userProvider;
+  
+  const OrderService({this.userProvider});
+
+  Map<String, String> _getHeaders() => AuthHelper.getAuthHeaders(userProvider);
 
   Future<Map<String, dynamic>> get({
     int page = 1,
@@ -27,7 +33,7 @@ class OrderService {
     final uri = Uri.parse('$apiBaseUrl/api/order/get')
         .replace(queryParameters: queryParams);
     
-    final response = await http.get(uri);
+    final response = await http.get(uri, headers: _getHeaders());
     
     if (response.statusCode == 200) {
       final json = jsonDecode(response.body);
@@ -48,7 +54,7 @@ class OrderService {
 
   Future<Order?> getById(int id) async {
     final uri = Uri.parse('$apiBaseUrl/api/order/get/$id');
-    final response = await http.get(uri);
+    final response = await http.get(uri, headers: _getHeaders());
     
     if (response.statusCode == 200) {
       final json = jsonDecode(response.body);
@@ -60,7 +66,7 @@ class OrderService {
 
   Future<bool> deleteById(int id) async {
     final uri = Uri.parse('$apiBaseUrl/api/order/delete/$id');
-    final response = await http.delete(uri);
+    final response = await http.delete(uri, headers: _getHeaders());
     return response.statusCode == 200;
   }
 
@@ -68,7 +74,7 @@ class OrderService {
     final uri = Uri.parse('$apiBaseUrl/api/order/insert');
     final response = await http.post(
       uri,
-      headers: {'Content-Type': 'application/json'},
+      headers: _getHeaders(),
       body: jsonEncode(request.toJson()),
     );
     return response.statusCode == 200;
@@ -78,7 +84,7 @@ class OrderService {
     final uri = Uri.parse('$apiBaseUrl/api/order/update/${request.id}');
     final response = await http.put(
       uri,
-      headers: {'Content-Type': 'application/json'},
+      headers: _getHeaders(),
       body: jsonEncode(request.toJson()),
     );
     return response.statusCode == 200;

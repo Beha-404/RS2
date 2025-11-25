@@ -1,10 +1,12 @@
 import 'package:desktop/models/order.dart';
+import 'package:desktop/providers/user_provider.dart';
 import 'package:desktop/services/order_service.dart';
 import 'package:desktop/services/pdf_report_service.dart';
 import 'package:desktop/widgets/order_details_dialog.dart';
 import 'package:desktop/widgets/desktop_app_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
 
 class OrdersPage extends StatefulWidget {
 	const OrdersPage({super.key});
@@ -14,7 +16,7 @@ class OrdersPage extends StatefulWidget {
 }
 
 class _OrdersPageState extends State<OrdersPage> {
-	final OrderService _orderService = const OrderService();
+	late OrderService _orderService;
 	List<Order> _orders = [];
 	bool _isLoading = true;
 	String? _errorMessage;
@@ -27,7 +29,11 @@ class _OrdersPageState extends State<OrdersPage> {
 	@override
 	void initState() {
 		super.initState();
-		_loadOrders();
+		WidgetsBinding.instance.addPostFrameCallback((_) {
+			final userProvider = Provider.of<UserProvider>(context, listen: false);
+			_orderService = OrderService(userProvider: userProvider);
+			_loadOrders();
+		});
 	}
 
 	@override

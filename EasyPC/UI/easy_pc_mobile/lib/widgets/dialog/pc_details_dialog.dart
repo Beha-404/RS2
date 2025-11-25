@@ -489,7 +489,7 @@ class _PcDetailsContentState extends State<_PcDetailsContent> {
     return GestureDetector(
       onTap: () {
         Navigator.pop(context);
-        PcDetailsDialog.show(context, pc);
+        PcDetailsDialog.show(widget.parentContext, pc);
       },
       child: Container(
         width: 200,
@@ -650,10 +650,10 @@ class _PcDetailsContentState extends State<_PcDetailsContent> {
           );
 
           cartProvider.addItem(
-            widget.pc.id!,
-            widget.pc.name ?? "Unknown name",
-            widget.pc.price ?? 0,
-            widget.pc.picture,
+            _currentPc!.id!,
+            _currentPc!.name ?? "Unknown name",
+            _currentPc!.price ?? 0,
+            _currentPc!.picture,
           );
           ScaffoldMessenger.of(widget.parentContext).clearSnackBars();
           ScaffoldMessenger.of(widget.parentContext).showSnackBar(
@@ -662,7 +662,7 @@ class _PcDetailsContentState extends State<_PcDetailsContent> {
                 children: [
                   const Icon(Icons.check_circle, color: Colors.white),
                   const SizedBox(width: 12),
-                  Expanded(child: Text('${widget.pc.name} added to cart')),
+                  Expanded(child: Text('${_currentPc!.name} added to cart')),
                 ],
               ),
               backgroundColor: Colors.grey[850],

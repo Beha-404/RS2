@@ -11,7 +11,7 @@ namespace EasyPC.Services.Interfaces
         public Model.User? Restore(int id);
         public Model.User? Update(int id, UserUpdateRequest updateRequest);
         public Model.User? UpdateRole(UpdateRoleRequest updateRoleRequest);
-        public List<Model.User>? Get(UserSearchObject? userSearchObject);
+        public Model.PagedResult<Model.User>? Get(UserSearchObject? userSearchObject);
         public Model.User? GetUserById(int id);
     }
 }

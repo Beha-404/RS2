@@ -23,7 +23,7 @@ namespace EasyPC.Services
                 Cases = await _context.Cases.Where(x => x.StateMachine != "hidden").ToListAsync(),
                 MotherBoards = await _context.Motherboards.Where(x => x.StateMachine != "hidden").ToListAsync(),
                 PowerSupplies = await _context.PowerSupplies.Where(x => x.StateMachine != "hidden").ToListAsync(),
-                Manufacturers = await _context.Manufacturers.Where(x => x.StateMachine != "hidden").ToListAsync(),
+                Manufacturers = await _context.Manufacturers.ToListAsync(),
                 Pcs = await _context.PCs.Where(x => x.StateMachine != "hidden").ToListAsync()
             };
             return _mapper.Map<Model.Products>(products);

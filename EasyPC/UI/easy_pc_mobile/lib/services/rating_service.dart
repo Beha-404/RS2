@@ -10,13 +10,19 @@ class RatingService {
     required int userId,
     required int pcId,
     required int ratingValue,
+    required String username,
+    required String password,
   }) async {
     final uri = Uri.parse('$apiBaseUrl/api/rating/insert');
+    final credentials = base64Encode(utf8.encode('$username:$password'));
 
     try {
       final response = await http.post(
         uri,
-        headers: {'Content-Type': 'application/json'},
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Basic $credentials',
+        },
         body: jsonEncode({
           'userId': userId,
           'pcId': pcId,
@@ -64,13 +70,19 @@ class RatingService {
   Future<Rating?> update({
     required int id,
     required int ratingValue,
+    required String username,
+    required String password,
   }) async {
     final uri = Uri.parse('$apiBaseUrl/api/rating/update/$id');
+    final credentials = base64Encode(utf8.encode('$username:$password'));
 
     try {
       final response = await http.put(
         uri,
-        headers: {'Content-Type': 'application/json'},
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Basic $credentials',
+        },
         body: jsonEncode({
           'ratingValue': ratingValue,
         }),
@@ -87,11 +99,21 @@ class RatingService {
     }
   }
 
-  Future<bool> delete(int id) async {
+  Future<bool> delete(
+    int id, {
+    required String username,
+    required String password,
+  }) async {
     final uri = Uri.parse('$apiBaseUrl/api/rating/delete/$id');
+    final credentials = base64Encode(utf8.encode('$username:$password'));
 
     try {
-      final response = await http.delete(uri);
+      final response = await http.delete(
+        uri,
+        headers: {
+          'Authorization': 'Basic $credentials',
+        },
+      );
       return response.statusCode == 200;
     } catch (e) {
       throw Exception('Failed to delete rating: $e');

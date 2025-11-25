@@ -76,7 +76,12 @@ class UserService {
   }
 
 
-  Future<User> updateUser({required User user, Uint8List? profilePicture}) async {
+  Future<User> updateUser({
+    required User user,
+    Uint8List? profilePicture,
+    required String username,
+    required String password,
+  }) async {
     if (user.id == null) {
       throw Exception('Cannot update: user.id is required');
     }
@@ -95,9 +100,11 @@ class UserService {
   if (pic != null) payload['profilePicture'] = base64Encode(pic);
 
     try {
+      final credentials = base64Encode(utf8.encode('$username:$password'));
       final headers = <String, String>{
         'Content-Type': 'application/json',
         'Accept': 'application/json',
+        'Authorization': 'Basic $credentials',
       };
 
       final resp = await http.post(

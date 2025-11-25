@@ -17,6 +17,10 @@ class _RoleManagementPageState extends State<RoleManagementPage> {
   final _userService = const UserService();
   List<User>? _users;
   bool _loading = false;
+  int _currentPage = 1;
+  final int _pageSize = 5;
+  int _totalCount = 0;
+  String _lastSearchTerm = '';
 
   static const _roleNames = {
     0: 'User',
@@ -169,16 +173,63 @@ class _RoleManagementPageState extends State<RoleManagementPage> {
       );
     }
 
+    final totalPages = (_totalCount / _pageSize).ceil();
+
+    return Column(
+      children: [
+        Container(
+          width: double.infinity,
+          padding: const EdgeInsets.all(16),
+          decoration: BoxDecoration(
+            color: const Color(0xFF191919),
+            borderRadius: BorderRadius.circular(10),
+            boxShadow: const [BoxShadow(color: Colors.black54, blurRadius: 12)],
+          ),
+          child: Column(
+            children: _users!.map((user) => _buildUserCard(user)).toList(),
+          ),
+        ),
+        if (totalPages > 1) ...[
+          const SizedBox(height: 16),
+          _buildPaginationControls(totalPages),
+        ],
+      ],
+    );
+  }
+
+  Widget _buildPaginationControls(int totalPages) {
     return Container(
-      width: double.infinity,
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
         color: const Color(0xFF191919),
         borderRadius: BorderRadius.circular(10),
-        boxShadow: const [BoxShadow(color: Colors.black54, blurRadius: 12)],
       ),
-      child: Column(
-        children: _users!.map((user) => _buildUserCard(user)).toList(),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          IconButton(
+            onPressed: _currentPage > 1 && !_loading
+                ? () => _searchUsers(page: _currentPage - 1)
+                : null,
+            icon: const Icon(Icons.chevron_left),
+            color: const Color(0xFFFFCC00),
+            disabledColor: Colors.grey,
+          ),
+          const SizedBox(width: 16),
+          Text(
+            'Page $_currentPage of $totalPages',
+            style: const TextStyle(color: Colors.white, fontSize: 16),
+          ),
+          const SizedBox(width: 16),
+          IconButton(
+            onPressed: _currentPage < totalPages && !_loading
+                ? () => _searchUsers(page: _currentPage + 1)
+                : null,
+            icon: const Icon(Icons.chevron_right),
+            color: const Color(0xFFFFCC00),
+            disabledColor: Colors.grey,
+          ),
+        ],
       ),
     );
   }
@@ -293,7 +344,7 @@ class _RoleManagementPageState extends State<RoleManagementPage> {
     );
   }
 
-  Future<void> _searchUsers() async {
+  Future<void> _searchUsers({int? page}) async {
     final searchTerm = _searchController.text.trim();
     if (searchTerm.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
@@ -305,11 +356,39 @@ class _RoleManagementPageState extends State<RoleManagementPage> {
       return;
     }
 
+    final userProvider = context.read<UserProvider>();
+    final currentUsername = userProvider.username;
+    final currentPassword = userProvider.password;
+
+    if (currentUsername == null || currentPassword == null) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Authentication required. Please log in again.'),
+          backgroundColor: Colors.red,
+        ),
+      );
+      return;
+    }
+
+    if (searchTerm != _lastSearchTerm) {
+      _currentPage = 1;
+      _lastSearchTerm = searchTerm;
+    } else if (page != null) {
+      _currentPage = page;
+    }
+
     setState(() => _loading = true);
     try {
-      final users = await _userService.searchUsers(username: searchTerm);
+      final result = await _userService.searchUsers(
+        username: searchTerm,
+        page: _currentPage,
+        pageSize: _pageSize,
+        authUsername: currentUsername,
+        authPassword: currentPassword,
+      );
       setState(() {
-        _users = users;
+        _users = result['users'] as List<User>;
+        _totalCount = result['totalCount'] as int;
         _loading = false;
       });
     } catch (e) {

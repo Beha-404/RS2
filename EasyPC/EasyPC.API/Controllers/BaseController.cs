@@ -1,10 +1,11 @@
-﻿using EasyPC.Services.Interfaces;
+﻿using EasyPC.Model;
+using EasyPC.Services.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore.SqlServer.Query.Internal;
-using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 
 namespace EasyPC.API.Controllers
 {
+    [Authorize]
     [ApiController]
     [Route("api/[controller]")]
     public class BaseController<TModel,TSearch, TInsert,TUpdate> : ControllerBase
@@ -15,12 +16,14 @@ namespace EasyPC.API.Controllers
             _service = service;
         }
 
+        [AllowAnonymous]
         [HttpGet("get")]
-        public virtual PagedResult<TModel> GetAll([FromQuery] TSearch search)
+        public virtual Model.PagedResult<TModel> GetAll([FromQuery] TSearch search)
         {
             return _service.GetAll(search);
         }
         
+        [AllowAnonymous]
         [HttpGet("get/{id}")]
         public virtual TModel? GetById(int id)
         {
@@ -33,30 +36,35 @@ namespace EasyPC.API.Controllers
             return _service.AllowedActions(id);
         }
 
+        [Authorize(Roles = "Admin,SuperAdmin")]
         [HttpPost("insert")]
         public virtual TModel? Insert([FromBody]TInsert insertRequest)
         {
             return _service.Insert(insertRequest);
         }
 
+        [Authorize(Roles = "Admin,SuperAdmin")]
         [HttpPut("update/{id}")]
         public virtual TModel? Update(int id, [FromBody]TUpdate updateRequest)
         {
             return _service.Update(id, updateRequest);
         }
 
+        [Authorize(Roles = "Admin,SuperAdmin")]
         [HttpPut("activate/{id}")]
         public virtual TModel? Activate(int id)
         {
             return _service.Activate(id);
         }
 
+        [Authorize(Roles = "Admin,SuperAdmin")]
         [HttpPut("edit/{id}")]
         public virtual TModel? Edit(int id)
         {
             return _service.Edit(id);
         }
 
+        [Authorize(Roles = "Admin,SuperAdmin")]
         [HttpPut("hide/{id}")]
         public virtual TModel? Hide(int id)
         {

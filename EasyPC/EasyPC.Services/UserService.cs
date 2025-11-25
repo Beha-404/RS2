@@ -1,5 +1,4 @@
-﻿using EasyPC.Model;
-using EasyPC.Model.Requests.UserRequests;
+﻿using EasyPC.Model.Requests.UserRequests;
 using EasyPC.Model.SearchObjects;
 using EasyPC.Services.Database;
 using EasyPC.Services.Interfaces;
@@ -28,23 +27,42 @@ namespace EasyPC.Services
             return _mapper.Map<Model.User>(user);
         }
 
-        public List<Model.User>? Get(UserSearchObject? userSearchObject)
+        public Model.PagedResult<Model.User>? Get(UserSearchObject? userSearchObject)
         {
             var query = _context.Users.AsQueryable();
             if (userSearchObject == null)
             {
-                return _mapper.Map<List<Model.User>>(query.ToList());
+                var allUsers = _mapper.Map<List<Model.User>>(query.ToList());
+                return new Model.PagedResult<Model.User>
+                {
+                    Items = allUsers,
+                    TotalCount = allUsers.Count,
+                    Page = 1,
+                    PageSize = allUsers.Count
+                };
             }
 
             query = ApplyFilter(query, userSearchObject);
+            
+            // Get total count before pagination
+            var totalCount = query.Count();
+            
             if (userSearchObject.Page.HasValue && userSearchObject.PageSize.HasValue)
             {
                 var skip = (userSearchObject.Page.Value - 1) * userSearchObject.PageSize.Value;
                 var take = userSearchObject.PageSize.Value;
                 query = query.Skip(skip).Take(take);
             }
-            return _mapper.Map<List<Model.User>>(query.ToList());
-
+            
+            var items = _mapper.Map<List<Model.User>>(query.ToList());
+            
+            return new Model.PagedResult<Model.User>
+            {
+                Items = items,
+                TotalCount = totalCount,
+                Page = userSearchObject.Page ?? 1,
+                PageSize = userSearchObject.PageSize ?? totalCount
+            };
         }
 
         public Model.User? GetUserById(int id)
@@ -57,9 +75,14 @@ namespace EasyPC.Services
 
         public Model.User? Login(string username, string password)
         {
-            var user = _context.Users.FirstOrDefault(u => u.Username == username && u.Password == password);
+            var user = _context.Users.FirstOrDefault(u => u.Username == username);
             if (user == null)
                 return null;
+                
+            var hash = GenerateHash(password, user.Salt!);
+            if (!hash.SequenceEqual(user.Hash!))
+                return null;
+
             return _mapper.Map<Model.User>(user);
         }
 
@@ -67,11 +90,14 @@ namespace EasyPC.Services
         {
             if(username == null || email == null || password == null)
                 return null;
+
+            var (hash, salt) = GenerateHash(password);
             var newUser = new Database.User
             {
                 Username = username,
                 Email = email,
-                Password = password,
+                Hash = hash,
+                Salt = salt,
             };
 
             _context.Users.Add(newUser);
@@ -138,6 +164,20 @@ namespace EasyPC.Services
                 query = query.Where(u => u.LastName!.Contains(searchObject.LastName));
             }
             return query;
+        }
+
+        private (byte[] hash, byte[] salt) GenerateHash(string password)
+        {
+            using var hmac = new System.Security.Cryptography.HMACSHA512();
+            var salt = hmac.Key;
+            var hash = hmac.ComputeHash(System.Text.Encoding.UTF8.GetBytes(password));
+            return (hash, salt);
+        }
+
+        private byte[] GenerateHash(string password, byte[] salt)
+        {
+            using var hmac = new System.Security.Cryptography.HMACSHA512(salt);
+            return hmac.ComputeHash(System.Text.Encoding.UTF8.GetBytes(password));
         }
     }
 }

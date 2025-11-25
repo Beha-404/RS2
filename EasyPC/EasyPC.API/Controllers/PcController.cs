@@ -1,6 +1,7 @@
 using EasyPC.Model.Requests.PcRequests;
 using EasyPC.Model.SearchObjects;
 using EasyPC.Services.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace EasyPC.API.Controllers
@@ -12,6 +13,8 @@ namespace EasyPC.API.Controllers
         {
             _service = service;
         }
+
+        [AllowAnonymous]
         [HttpGet("{id}/recommend")]
         public List<Model.PC> Recommend(int id)
         {

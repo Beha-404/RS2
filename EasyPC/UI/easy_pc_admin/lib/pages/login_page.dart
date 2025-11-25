@@ -190,11 +190,15 @@ class _LoginPageState extends State<LoginPage> {
     } catch (e) {
       debugPrint('Login error: $e');
       if (!mounted) return;
+      
+      String errorMessage = e.toString().replaceFirst('Exception: ', '');
+      
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: Text(e.toString()),
+          content: Text(errorMessage),
           backgroundColor: Colors.red.shade900,
           behavior: SnackBarBehavior.floating,
+          duration: const Duration(seconds: 4),
         ),
       );
     } finally {

@@ -1,4 +1,5 @@
-﻿using EasyPC.Model.Requests.OrderRequests;
+﻿using EasyPC.Model;
+using EasyPC.Model.Requests.OrderRequests;
 using EasyPC.Model.SearchObjects;
 using System;
 using System.Collections.Generic;
@@ -10,7 +11,7 @@ namespace EasyPC.Services.Interfaces
 {
     public interface IOrderService
     {
-        public PagedResult<Model.Order> Get(OrderSearchObjects searchObject);
+        public Model.PagedResult<Model.Order> Get(OrderSearchObjects searchObject);
         public Model.Order? Insert(OrderInsertRequest insert);
         public Model.Order? Update(int id, OrderDetailsUpdateRequest updateRequest);
         public bool Delete(int id);

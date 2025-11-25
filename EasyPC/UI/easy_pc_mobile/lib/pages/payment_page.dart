@@ -1,5 +1,6 @@
 import 'package:easy_pc/models/cart.dart';
 import 'package:easy_pc/providers/cart_provider.dart';
+import 'package:easy_pc/providers/user_provider.dart';
 import 'package:easy_pc/services/order_service.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -162,6 +163,42 @@ class PaymentPage extends StatelessWidget {
     );
 
     try {
+      final userProvider = Provider.of<UserProvider>(context, listen: false);
+      final username = userProvider.user?.username;
+      final password = userProvider.password;
+
+      if (username == null || password == null) {
+        if (context.mounted) {
+          Navigator.pop(context);
+        }
+        if (context.mounted) {
+          showDialog(
+            context: context,
+            builder: (context) => AlertDialog(
+              backgroundColor: const Color(0xFF2A2A2A),
+              title: const Row(
+                children: [
+                  Icon(Icons.error, color: Colors.red, size: 32),
+                  SizedBox(width: 12),
+                  Text('Authentication Error', style: TextStyle(color: yellow)),
+                ],
+              ),
+              content: const Text(
+                'You need to be logged in to place an order.',
+                style: TextStyle(color: Colors.white70),
+              ),
+              actions: [
+                TextButton(
+                  onPressed: () => Navigator.pop(context),
+                  child: const Text('OK', style: TextStyle(color: yellow)),
+                ),
+              ],
+            ),
+          );
+        }
+        return;
+      }
+
       final orderRequest = {
         'paymentMethod': paymentMethod,
         'userId': userId,
@@ -174,7 +211,11 @@ class PaymentPage extends StatelessWidget {
             .toList(),
       };
 
-      await OrderService().createOrder(orderRequest);
+      await OrderService().createOrder(
+        orderRequest,
+        username: username,
+        password: password,
+      );
 
       if (context.mounted) {
         Provider.of<CartProvider>(context, listen: false).clear();

@@ -1,4 +1,5 @@
-﻿using EasyPC.Model.SearchObjects;
+﻿using EasyPC.Model;
+using EasyPC.Model.SearchObjects;
 using EasyPC.Services.Database;
 using EasyPC.Services.Interfaces;
 using EasyPC.Services.StateMachine;
@@ -32,12 +33,12 @@ namespace EasyPC.Services
             public const string Hidden = "hidden";    
         }
 
-        public virtual PagedResult<Tmodel> GetAll(TSearch search)
+        public virtual Model.PagedResult<Tmodel> GetAll(TSearch search)
         {
             var query = _context.Set<TEntity>().AsQueryable();
             if (search == null)
             {
-                return new PagedResult<Tmodel>
+                return new Model.PagedResult<Tmodel>
                 {
                     Items = _mapper.Map<List<Tmodel>>(query.ToList()),
                     TotalCount = query.Count(),
@@ -56,7 +57,7 @@ namespace EasyPC.Services
                 var take = search.PageSize.Value;
                 query = query.Skip(skip).Take(take);
             }
-            return new PagedResult<Tmodel>
+            return new Model.PagedResult<Tmodel>
             {
                 Items = _mapper.Map<List<Tmodel>>(query.ToList()),
                 TotalCount = totalCount,
@@ -158,7 +159,7 @@ namespace EasyPC.Services
                 return false;
             }
 
-            return roleClaim == UserRole.Admin.ToString() || roleClaim == UserRole.SuperAdmin.ToString();
+            return roleClaim == Database.UserRole.Admin.ToString() || roleClaim == Database.UserRole.SuperAdmin.ToString();
         }
 
         public List<string> AllowedActions(int id)

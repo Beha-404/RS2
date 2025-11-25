@@ -11,6 +11,5 @@ namespace EasyPC.Model
         public int Id { get; set; }
         public string Name { get; set; } = null!;
         public string ComponentType { get; set; } = null!;
-        public string? StateMachine { get; set; }
     }
 }

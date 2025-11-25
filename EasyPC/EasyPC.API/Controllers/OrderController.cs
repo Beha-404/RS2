@@ -1,10 +1,12 @@
 ﻿using EasyPC.Model.Requests.OrderRequests;
 using EasyPC.Model.SearchObjects;
 using EasyPC.Services.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace EasyPC.API.Controllers
 {
+    [Authorize]
     [ApiController]
     [Route("api/[controller]")]
     public class OrderController : ControllerBase

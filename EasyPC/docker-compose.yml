@@ -1,0 +1,99 @@
+services:
+  rabbitmq:
+    image: rabbitmq:3-management
+    container_name: easypc-rabbitmq
+    restart: unless-stopped
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    environment:
+      RABBITMQ_DEFAULT_USER: admin
+      RABBITMQ_DEFAULT_PASS: admin
+    volumes:
+      - rabbitmq-data:/var/lib/rabbitmq
+    networks:
+      - easypc-network
+    healthcheck:
+      test: rabbitmq-diagnostics -q ping
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  sqlserver:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    container_name: easypc-sqlserver
+    restart: unless-stopped
+    ports:
+      - "1433:1433"
+    expose:
+      - 1433
+    environment:
+      ACCEPT_EULA: "Y"
+      SA_PASSWORD: "YourStrong@Passw0rd"
+      MSSQL_PID: Developer
+    volumes:
+      - sqlserver-data:/var/opt/mssql
+    networks:
+      - easypc-network
+    healthcheck:
+      test: ["CMD-SHELL", "/opt/mssql-tools18/bin/sqlcmd -S localhost -U sa -P YourStrong@Passw0rd -Q 'SELECT 1' -C || exit 1"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+      start_period: 60s
+
+  api:
+    build:
+      context: .
+      dockerfile: EasyPC.API/Dockerfile
+    container_name: easypc-api
+    restart: unless-stopped
+    ports:
+      - "5285:8080"
+    environment:
+      ASPNETCORE_ENVIRONMENT: Production
+      ConnectionStrings__DefaultConnection: "Server=sqlserver,1433;Database=EasyPC_RS2;User=sa;Password=YourStrong@Passw0rd;TrustServerCertificate=True;"
+      RabbitMQ__Host: rabbitmq
+      RabbitMQ__Username: admin
+      RabbitMQ__Password: admin
+      RabbitMQ__VirtualHost: /
+    depends_on:
+      - rabbitmq
+      - sqlserver
+    links:
+      - sqlserver
+      - rabbitmq
+    networks:
+      - easypc-network
+
+  subscriber:
+    build:
+      context: .
+      dockerfile: EasyPC.Subscriber/Dockerfile
+    container_name: easypc-subscriber
+    restart: unless-stopped
+    environment:
+      RabbitMQ__Host: rabbitmq
+      RabbitMQ__Username: admin
+      RabbitMQ__Password: admin
+      RabbitMQ__VirtualHost: /
+      SMTP_SERVER: smtp.gmail.com
+      SMTP_PORT: 587
+      SMTP_USERNAME: tt8915119@gmail.com
+      SMTP_PASSWORD: pass12$$TEST22
+      SMTP_ENABLE_SSL: true
+      EMAIL_TEST_MODE: true
+    depends_on:
+      - rabbitmq
+    links:
+      - rabbitmq
+    networks:
+      - easypc-network
+
+networks:
+  easypc-network:
+    driver: bridge
+
+volumes:
+  rabbitmq-data:
+  sqlserver-data:

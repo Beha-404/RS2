@@ -1,4 +1,5 @@
-﻿using EasyPC.Model.Requests.PcRequests;
+﻿using EasyPC.Model;
+using EasyPC.Model.Requests.PcRequests;
 using EasyPC.Model.SearchObjects;
 using EasyPC.Services.Database;
 using EasyPC.Services.Interfaces;
@@ -20,9 +21,9 @@ namespace EasyPC.Services
             _cache = cache;
         }
 
-        public override PagedResult<Model.PC> GetAll(PcSearchObject search)
+        public override Model.PagedResult<Model.PC> GetAll(PcSearchObject search)
         {
-            var query = _context.Set<PC>()
+            var query = _context.Set<Database.PC>()
                 .Include(x => x.Processor)
                 .Include(x => x.GraphicsCard)
                 .Include(x => x.Case)
@@ -69,7 +70,7 @@ namespace EasyPC.Services
 
         public override Model.PC? GetById(int id)
         {
-            var entity = _context.Set<PC>()
+            var entity = _context.Set<Database.PC>()
                 .Include(x => x.Processor)
                 .Include(x => x.GraphicsCard)
                 .Include(x => x.Case)
@@ -86,7 +87,7 @@ namespace EasyPC.Services
             return _mapper.Map<Model.PC>(entity);
         }
 
-        public override IQueryable<PC> ApplyFilter(IQueryable<PC> query, PcSearchObject? search)
+        public override IQueryable<Database.PC> ApplyFilter(IQueryable<Database.PC> query, PcSearchObject? search)
         {
             if (!IsAdmin())
             {
