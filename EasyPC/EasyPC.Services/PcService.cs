@@ -166,7 +166,7 @@ namespace EasyPC.Services
                 request.GraphicsCardId,
                 request.RamId,
                 request.MotherBoardId,
-                request.PsuId,
+                request.PowerSupplyId,
                 request.CaseId
             );
 

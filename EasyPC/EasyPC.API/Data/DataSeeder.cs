@@ -72,7 +72,9 @@ namespace EasyPC.API.Data
                 Role = UserRole.SuperAdmin,
                 City = "Sarajevo",
                 State = "FBiH",
-                Country = "Bosnia and Herzegovina"
+                Country = "Bosnia and Herzegovina",
+                Address = "Zmaja od Bosne 1",
+                PostalCode = "71000"
             });
 
             var (adminHash, adminSalt) = GenerateHash("admin123");
@@ -88,14 +90,18 @@ namespace EasyPC.API.Data
                 Role = UserRole.Admin,
                 City = "Sarajevo",
                 State = "FBiH",
-                Country = "Bosnia and Herzegovina"
+                Country = "Bosnia and Herzegovina",
+                Address = "Titova 15",
+                PostalCode = "71000"
             });
 
             var firstNames = new[] { "Marko", "Ana", "Petar", "Jovana", "Stefan", "Milica", "Nikola", "Jelena", "Aleksandar", "Katarina" };
             var lastNames = new[] { "Marković", "Petrović", "Nikolić", "Jovanović", "Đorđević", "Ilić", "Pavlović", "Stanković", "Radovanović", "Milosavljević" };
             var cities = new[] { "Beograd", "Novi Sad", "Niš", "Sarajevo", "Zagreb", "Podgorica", "Skopje", "Ljubljana" };
+            var addresses = new[] { "Kralja Petra 12", "Kneza Miloša 45", "Bulevar Oslobođenja 23", "Trg Slobode 8", "Ulica Maršala Tita 34", "Nikole Tesle 19", "Svetosavska 7", "Partizanska 56", "Marka Miljanova 11", "Vuka Karadžića 28" };
+            var postalCodes = new[] { "11000", "21000", "18000", "71000", "10000", "81000", "1000", "1000", "11000", "71000" };
 
-            for (int i = 0; i < 10; i++)
+            for (int i = 0; i < 5; i++)
             {
                 var (hash, salt) = GenerateHash("user123");
                 users.Add(new User
@@ -110,7 +116,9 @@ namespace EasyPC.API.Data
                     Role = UserRole.User,
                     City = cities[_random.Next(cities.Length)],
                     State = "FBiH",
-                    Country = "Bosnia and Herzegovina"
+                    Country = "Bosnia and Herzegovina",
+                    Address = addresses[i],
+                    PostalCode = postalCodes[i]
                 });
             }
             _context.Users.AddRange(users);
@@ -525,7 +533,7 @@ namespace EasyPC.API.Data
                     GraphicsCardId = gpu.Id,
                     MotherBoardId = motherboard.Id,
                     CaseId = pcCase.Id,
-                    PsuId = psu.Id,
+                    PowerSupplyId = psu.Id,
                     Picture = pcImage,
                     StateMachine = "active",
                     RatingCount = _random.Next(1, 5),

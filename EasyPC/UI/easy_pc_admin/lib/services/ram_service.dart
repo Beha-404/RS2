@@ -4,6 +4,7 @@ import 'package:desktop/models/ram.dart';
 import 'package:http/http.dart' as http;
 import 'package:desktop/providers/user_provider.dart';
 import 'package:desktop/utils/auth_helper.dart';
+import 'package:desktop/utils/error_parser.dart';
 
 class RamService {
   final UserProvider? userProvider;
@@ -36,13 +37,13 @@ class RamService {
     final uri = Uri.parse('$apiBaseUrl/api/ram/insert');
     final response = await http.post(
       uri,
-      headers: AuthHelper.getAuthHeaders(userProvider),
+      headers: {...AuthHelper.getAuthHeaders(userProvider), 'Content-Type': 'application/json'},
       body: jsonEncode(request.toJson()),
     );
     if (response.statusCode == 200) {
       return true;
     } else {
-      throw Exception('Failed to create ram');
+      throw Exception(ErrorParser.parseHttpError(response));
     }
   }
 
@@ -60,13 +61,13 @@ class RamService {
     final uri = Uri.parse('$apiBaseUrl/api/ram/update/${request.id}');
     final response = await http.put(
       uri,
-      headers: AuthHelper.getAuthHeaders(userProvider),
+      headers: {...AuthHelper.getAuthHeaders(userProvider), 'Content-Type': 'application/json'},
       body: jsonEncode(request.toJson()),
     );
     if (response.statusCode == 200) {
       return true;
     } else {
-      throw Exception('Failed to update ram');
+      throw Exception(ErrorParser.parseHttpError(response));
     }
   }
 

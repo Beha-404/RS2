@@ -63,5 +63,6 @@ class GraphicsCard {
     'name': name,
     'vram': vram,
     'manufacturerId': manufacturerId,
+    'stateMachine': stateMachine,
   };
 }

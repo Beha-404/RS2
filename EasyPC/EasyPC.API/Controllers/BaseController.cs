@@ -38,16 +38,26 @@ namespace EasyPC.API.Controllers
 
         [Authorize(Roles = "Admin,SuperAdmin")]
         [HttpPost("insert")]
-        public virtual TModel? Insert([FromBody]TInsert insertRequest)
+        public virtual IActionResult Insert([FromBody]TInsert insertRequest)
         {
-            return _service.Insert(insertRequest);
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+            var result = _service.Insert(insertRequest);
+            return Ok(result);
         }
 
         [Authorize(Roles = "Admin,SuperAdmin")]
         [HttpPut("update/{id}")]
-        public virtual TModel? Update(int id, [FromBody]TUpdate updateRequest)
+        public virtual IActionResult Update(int id, [FromBody]TUpdate updateRequest)
         {
-            return _service.Update(id, updateRequest);
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+            var result = _service.Update(id, updateRequest);
+            return Ok(result);
         }
 
         [Authorize(Roles = "Admin,SuperAdmin")]

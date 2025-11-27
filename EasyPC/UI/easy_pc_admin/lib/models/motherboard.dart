@@ -62,5 +62,6 @@ class MotherBoard {
     'name': name,
     'socket': socket,
     'manufacturerId': manufacturerId,
+    'stateMachine': stateMachine,
   };
 }

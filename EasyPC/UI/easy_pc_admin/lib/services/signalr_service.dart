@@ -23,7 +23,6 @@ class SignalRService {
 
   Future<void> connect(String username, String password) async {
     try {
-      // Disconnect any existing connection first to prevent duplicate handlers
       if (_hubConnection != null) {
         print('SignalR: Disconnecting existing connection before reconnecting...');
         await disconnect();
@@ -64,10 +63,8 @@ class SignalRService {
   }
 
   void _setupEventHandlers() {
-    // Remove any existing handlers before adding new ones to prevent duplicates
     _hubConnection!.off('ReceiveMessage');
     
-    // Register the handler
     _hubConnection!.on('ReceiveMessage', _handleReceiveMessage);
 
     _hubConnection!.onreconnecting(({error}) {

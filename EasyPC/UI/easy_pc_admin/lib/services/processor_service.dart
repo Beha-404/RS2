@@ -3,6 +3,7 @@ import 'package:desktop/config/config.dart';
 import 'package:desktop/models/processor.dart';
 import 'package:desktop/providers/user_provider.dart';
 import 'package:desktop/utils/auth_helper.dart';
+import 'package:desktop/utils/error_parser.dart';
 import 'package:http/http.dart' as http;
 
 class ProcessorService {
@@ -39,13 +40,13 @@ class ProcessorService {
     final uri = Uri.parse('$apiBaseUrl/api/processor/insert');
     final response = await http.post(
       uri,
-      headers: _getHeaders(),
+      headers: {..._getHeaders(), 'Content-Type': 'application/json'},
       body: jsonEncode(request.toJson()),
     );
     if (response.statusCode == 200) {
       return true;
     } else {
-      throw Exception('Failed to create processor');
+      throw Exception(ErrorParser.parseHttpError(response));
     }
   }
 
@@ -63,13 +64,13 @@ class ProcessorService {
     final uri = Uri.parse('$apiBaseUrl/api/processor/update/${request.id}');
     final response = await http.put(
       uri,
-      headers: _getHeaders(),
+      headers: {..._getHeaders(), 'Content-Type': 'application/json'},
       body: jsonEncode(request.toJson()),
     );
     if (response.statusCode == 200) {
       return true;
     } else {
-      throw Exception('Failed to update processor');
+      throw Exception(ErrorParser.parseHttpError(response));
     }
   }
 

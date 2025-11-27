@@ -19,7 +19,7 @@ namespace EasyPC.Services.StateMachine.PcStateMachine
             var ram =  _context.Rams.Find(entity.RamId);
             var caseItem =  _context.Cases.Find(entity.CaseId);
             var motherBoard =  _context.Motherboards.Find(entity.MotherBoardId);
-            var psu =  _context.PowerSupplies.Find(entity.PsuId);
+            var psu =  _context.PowerSupplies.Find(entity.PowerSupplyId);
 
             entity.Price =
                 processor!.Price +

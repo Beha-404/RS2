@@ -3,6 +3,7 @@ import 'package:desktop/config/config.dart';
 import 'package:desktop/models/case.dart';
 import 'package:desktop/providers/user_provider.dart';
 import 'package:desktop/utils/auth_helper.dart';
+import 'package:desktop/utils/error_parser.dart';
 import 'package:http/http.dart' as http;
 
 class CaseService {
@@ -47,13 +48,13 @@ class CaseService {
     final uri = Uri.parse('$apiBaseUrl/api/case/insert');
     final response = await http.post(
       uri,
-      headers: AuthHelper.getAuthHeaders(userProvider),
+      headers: {...AuthHelper.getAuthHeaders(userProvider), 'Content-Type': 'application/json'},
       body: jsonEncode(request.toJson()),
     );
     if (response.statusCode == 200) {
       return true;
     } else {
-      throw Exception('Failed to create case');
+      throw Exception(ErrorParser.parseHttpError(response));
     }
   }
 
@@ -61,13 +62,13 @@ class CaseService {
     final uri = Uri.parse('$apiBaseUrl/api/case/update/${request.id}');
     final response = await http.put(
       uri,
-      headers: AuthHelper.getAuthHeaders(userProvider),
+      headers: {...AuthHelper.getAuthHeaders(userProvider), 'Content-Type': 'application/json'},
       body: jsonEncode(request.toJson()),
     );
     if (response.statusCode == 200) {
       return true;
     } else {
-      throw Exception('Failed to update case');
+      throw Exception(ErrorParser.parseHttpError(response));
     }
   }
 

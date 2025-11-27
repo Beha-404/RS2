@@ -35,16 +35,26 @@ namespace EasyPC.API.Controllers
 
         [Authorize(Roles = "Admin,SuperAdmin")]
         [HttpPost("insert")]
-        public Manufacturer? Insert([FromBody] ManufacturerInsertRequest insertRequest)
+        public IActionResult Insert([FromBody] ManufacturerInsertRequest insertRequest)
         {
-            return _service.Insert(insertRequest);
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+            var result = _service.Insert(insertRequest);
+            return Ok(result);
         }
 
         [Authorize(Roles = "Admin,SuperAdmin")]
         [HttpPut("update/{id}")]
-        public Manufacturer? Update(int id, [FromBody] ManufacturerUpdateRequest updateRequest)
+        public IActionResult Update(int id, [FromBody] ManufacturerUpdateRequest updateRequest)
         {
-            return _service.Update(id, updateRequest);
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+            var result = _service.Update(id, updateRequest);
+            return Ok(result);
         }
     }
 }

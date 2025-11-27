@@ -3,6 +3,7 @@ import 'package:desktop/config/config.dart';
 import 'package:desktop/models/manufacturer.dart';
 import 'package:desktop/providers/user_provider.dart';
 import 'package:desktop/utils/auth_helper.dart';
+import 'package:desktop/utils/error_parser.dart';
 import 'package:http/http.dart' as http;
 
 class ManufacturerService {
@@ -72,7 +73,7 @@ class ManufacturerService {
     if (response.statusCode == 200) {
       return true;
     } else {
-      throw Exception('Failed to create manufacturer');
+      throw Exception(ErrorParser.parseHttpError(response));
     }
   }
 
@@ -86,7 +87,7 @@ class ManufacturerService {
     if (response.statusCode == 200) {
       return true;
     } else {
-      throw Exception('Failed to update manufacturer');
+      throw Exception(ErrorParser.parseHttpError(response));
     }
   }
 }

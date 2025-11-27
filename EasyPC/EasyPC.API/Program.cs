@@ -167,6 +167,30 @@ using (var scope = app.Services.CreateScope())
 app.UseSwagger();
 app.UseSwaggerUI();
 
+app.UseExceptionHandler(errorApp =>
+{
+    errorApp.Run(async context =>
+    {
+        context.Response.StatusCode = 500;
+        context.Response.ContentType = "application/json";
+
+        var exceptionHandlerPathFeature = context.Features.Get<Microsoft.AspNetCore.Diagnostics.IExceptionHandlerPathFeature>();
+        var exception = exceptionHandlerPathFeature?.Error;
+
+        var errorResponse = new
+        {
+            title = "Internal Server Error",
+            status = 500,
+            detail = exception?.Message ?? "An unexpected error occurred",
+            errors = exception is Microsoft.EntityFrameworkCore.DbUpdateException dbEx && dbEx.InnerException != null
+                ? new { Database = new[] { dbEx.InnerException.Message } }
+                : null
+        };
+
+        await context.Response.WriteAsJsonAsync(errorResponse);
+    });
+});
+
 if (!app.Environment.IsDevelopment())
 {
     app.UseHttpsRedirection();

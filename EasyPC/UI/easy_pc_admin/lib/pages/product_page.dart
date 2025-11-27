@@ -41,7 +41,6 @@ class _ProductPageState extends State<ProductPage>
     "Ram",
     "Case",
     "Motherboard",
-    "Manufacturer",
     "PC",
   ];
 
@@ -267,163 +266,201 @@ class _ProductPageState extends State<ProductPage>
     }
 
     bool success = false;
+    String? errorMessage;
 
-    switch (_selectedType) {
-      case 'Processor':
-        switch (action) {
-          case 'Activate':
-            success = await processorService.activate(id);
-            break;
-          case 'Hide':
-            success = await processorService.hide(id);
-            break;
-          case 'Edit':
-            success = await processorService.edit(id);
-            break;
-        }
-        break;
-      case 'Graphics Card':
-        switch (action) {
-          case 'Activate':
-            success = await graphicsCardService.activate(id);
-            break;
-          case 'Hide':
-            success = await graphicsCardService.hide(id);
-            break;
-          case 'Edit':
-            success = await graphicsCardService.edit(id);
-            break;
-        }
-        break;
-      case 'Ram':
-        switch (action) {
-          case 'Activate':
-            success = await ramService.activate(id);
-            break;
-          case 'Hide':
-            success = await ramService.hide(id);
-            break;
-          case 'Edit':
-            success = await ramService.edit(id);
-            break;
-        }
-        break;
-      case 'Power Supply':
-        switch (action) {
-          case 'Activate':
-            success = await powerSupplyService.activate(id);
-            break;
-          case 'Hide':
-            success = await powerSupplyService.hide(id);
-            break;
-          case 'Edit':
-            success = await powerSupplyService.edit(id);
-            break;
-        }
-        break;
-      case 'Case':
-        switch (action) {
-          case 'Activate':
-            success = await caseService.activate(id);
-            break;
-          case 'Hide':
-            success = await caseService.hide(id);
-            break;
-          case 'Edit':
-            success = await caseService.edit(id);
-            break;
-        }
-        break;
-      case 'Motherboard':
-        switch (action) {
-          case 'Activate':
-            success = await motherboardService.activate(id);
-            break;
-          case 'Hide':
-            success = await motherboardService.hide(id);
-            break;
-          case 'Edit':
-            success = await motherboardService.edit(id);
-            break;
-        }
-        break;
-      case 'PC':
-        switch (action) {
-          case 'Activate':
-            success = await pcService.activate(id);
-            break;
-          case 'Hide':
-            success = await pcService.hide(id);
-            break;
-          case 'Edit':
-            success = await pcService.edit(id);
-            break;
-        }
-        break;
+    try {
+      switch (_selectedType) {
+        case 'Processor':
+          switch (action) {
+            case 'Activate':
+              success = await processorService.activate(id);
+              break;
+            case 'Hide':
+              success = await processorService.hide(id);
+              break;
+            case 'Edit':
+              success = await processorService.edit(id);
+              break;
+          }
+          break;
+        case 'Graphics Card':
+          switch (action) {
+            case 'Activate':
+              success = await graphicsCardService.activate(id);
+              break;
+            case 'Hide':
+              success = await graphicsCardService.hide(id);
+              break;
+            case 'Edit':
+              success = await graphicsCardService.edit(id);
+              break;
+          }
+          break;
+        case 'Ram':
+          switch (action) {
+            case 'Activate':
+              success = await ramService.activate(id);
+              break;
+            case 'Hide':
+              success = await ramService.hide(id);
+              break;
+            case 'Edit':
+              success = await ramService.edit(id);
+              break;
+          }
+          break;
+        case 'Power Supply':
+          switch (action) {
+            case 'Activate':
+              success = await powerSupplyService.activate(id);
+              break;
+            case 'Hide':
+              success = await powerSupplyService.hide(id);
+              break;
+            case 'Edit':
+              success = await powerSupplyService.edit(id);
+              break;
+          }
+          break;
+        case 'Case':
+          switch (action) {
+            case 'Activate':
+              success = await caseService.activate(id);
+              break;
+            case 'Hide':
+              success = await caseService.hide(id);
+              break;
+            case 'Edit':
+              success = await caseService.edit(id);
+              break;
+          }
+          break;
+        case 'Motherboard':
+          switch (action) {
+            case 'Activate':
+              success = await motherboardService.activate(id);
+              break;
+            case 'Hide':
+              success = await motherboardService.hide(id);
+              break;
+            case 'Edit':
+              success = await motherboardService.edit(id);
+              break;
+          }
+          break;
+        case 'PC':
+          switch (action) {
+            case 'Activate':
+              success = await pcService.activate(id);
+              break;
+            case 'Hide':
+              success = await pcService.hide(id);
+              break;
+            case 'Edit':
+              success = await pcService.edit(id);
+              break;
+          }
+          break;
+      }
+    } catch (e) {
+      errorMessage = e.toString();
+      success = false;
     }
 
     if (success) {
       await _loadItems();
-    }
-      if (!mounted) {
+      if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Action "$action" failed!')),
+          SnackBar(
+            content: Text('Action "$action" completed successfully!'),
+            backgroundColor: Colors.green,
+          ),
         );
       }
+    } else {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(errorMessage != null 
+              ? 'Action "$action" failed: $errorMessage' 
+              : 'Action "$action" failed!'),
+            backgroundColor: Colors.red,
+            duration: const Duration(seconds: 5),
+          ),
+        );
+      }
+    }
   }
 
   void _addItem() async {
     dynamic newEntity;
     bool success = false;
-    switch (_selectedType) {
-      case 'Graphics Card':
-        newEntity = GraphicsCard.fromMap(_newModel);
-        success = await graphicsCardService.insert(newEntity);
-        break;
-      case 'Processor':
-        newEntity = Processor.fromMap(_newModel);
-        success = await processorService.insert(newEntity);
-        break;
-      case 'Ram':
-        newEntity = Ram.fromMap(_newModel);
-        success = await ramService.insert(newEntity);
-        break;
-      case 'Power Supply':
-        newEntity = PowerSupply.fromMap(_newModel);
-        success = await powerSupplyService.insert(newEntity);
-        break;
-      case 'Case':
-        newEntity = Case.fromMap(_newModel);
-        success = await caseService.insert(newEntity);
-        break;
-      case 'Motherboard':
-        newEntity = MotherBoard.fromMap(_newModel);
-        success = await motherboardService.insert(newEntity);
-        break;
-      case 'Manufacturer':
-        newEntity = Manufacturer.fromMap(_newModel);
-        success = await manufacturerService.insert(newEntity);
-        break;
-      case 'PC':
-        newEntity = PC.fromMap(_newModel);
-        success = await pcService.insert(newEntity);
-        break;
-      default:
-        break;
+    String? errorMessage;
+    
+    try {
+      switch (_selectedType) {
+        case 'Graphics Card':
+          newEntity = GraphicsCard.fromMap(_newModel);
+          success = await graphicsCardService.insert(newEntity);
+          break;
+        case 'Processor':
+          newEntity = Processor.fromMap(_newModel);
+          success = await processorService.insert(newEntity);
+          break;
+        case 'Ram':
+          newEntity = Ram.fromMap(_newModel);
+          success = await ramService.insert(newEntity);
+          break;
+        case 'Power Supply':
+          newEntity = PowerSupply.fromMap(_newModel);
+          success = await powerSupplyService.insert(newEntity);
+          break;
+        case 'Case':
+          newEntity = Case.fromMap(_newModel);
+          success = await caseService.insert(newEntity);
+          break;
+        case 'Motherboard':
+          newEntity = MotherBoard.fromMap(_newModel);
+          success = await motherboardService.insert(newEntity);
+          break;
+        case 'Manufacturer':
+          newEntity = Manufacturer.fromMap(_newModel);
+          success = await manufacturerService.insert(newEntity);
+          break;
+        case 'PC':
+          newEntity = PC.fromMap(_newModel);
+          success = await pcService.insert(newEntity);
+          break;
+        default:
+          break;
+      }
+    } catch (e) {
+      errorMessage = e.toString();
+      success = false;
     }
+    
     if (success) {
       await _loadItems();
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Item added successfully!')),
+          const SnackBar(
+            content: Text('Item added successfully!'),
+            backgroundColor: Colors.green,
+          ),
         );
       }
       _closeForm();
     } else {
       if (mounted) {
-        ScaffoldMessenger.of(
-          context,
-        ).showSnackBar(const SnackBar(content: Text('Add failed!')));
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(errorMessage != null 
+              ? 'Add failed: $errorMessage' 
+              : 'Add failed!'),
+            backgroundColor: Colors.red,
+            duration: const Duration(seconds: 5),
+          ),
+        );
       }
     }
   }
@@ -431,59 +468,74 @@ class _ProductPageState extends State<ProductPage>
   void _updateItem() async {
     dynamic updatedEntity;
     bool success = false;
+    String? errorMessage;
 
     final modelAsMap = Map<String, dynamic>.from(_newModel);
 
-    switch (_selectedType) {
-      case 'Graphics Card':
-        updatedEntity = GraphicsCard.fromMap(modelAsMap);
-        success = await graphicsCardService.update(updatedEntity);
-        break;
-      case 'Processor':
-        updatedEntity = Processor.fromMap(modelAsMap);
-        success = await processorService.update(updatedEntity);
-        break;
-      case 'Ram':
-        updatedEntity = Ram.fromMap(modelAsMap);
-        success = await ramService.update(updatedEntity);
-        break;
-      case 'Power Supply':
-        updatedEntity = PowerSupply.fromMap(modelAsMap);
-        success = await powerSupplyService.update(updatedEntity);
-        break;
-      case 'Case':
-        updatedEntity = Case.fromMap(modelAsMap);
-        success = await caseService.update(updatedEntity);
-        break;
-      case 'Motherboard':
-        updatedEntity = MotherBoard.fromMap(modelAsMap);
-        success = await motherboardService.update(updatedEntity);
-        break;
-      case 'Manufacturer':
-        updatedEntity = Manufacturer.fromMap(modelAsMap);
-        success = await manufacturerService.update(updatedEntity);
-        break;
-      case 'PC':
-        updatedEntity = PC.fromMap(modelAsMap);
-        success = await pcService.update(updatedEntity);
-        break;
-      default:
-        break;
+    try {
+      switch (_selectedType) {
+        case 'Graphics Card':
+          updatedEntity = GraphicsCard.fromMap(modelAsMap);
+          success = await graphicsCardService.update(updatedEntity);
+          break;
+        case 'Processor':
+          updatedEntity = Processor.fromMap(modelAsMap);
+          success = await processorService.update(updatedEntity);
+          break;
+        case 'Ram':
+          updatedEntity = Ram.fromMap(modelAsMap);
+          success = await ramService.update(updatedEntity);
+          break;
+        case 'Power Supply':
+          updatedEntity = PowerSupply.fromMap(modelAsMap);
+          success = await powerSupplyService.update(updatedEntity);
+          break;
+        case 'Case':
+          updatedEntity = Case.fromMap(modelAsMap);
+          success = await caseService.update(updatedEntity);
+          break;
+        case 'Motherboard':
+          updatedEntity = MotherBoard.fromMap(modelAsMap);
+          success = await motherboardService.update(updatedEntity);
+          break;
+        case 'Manufacturer':
+          updatedEntity = Manufacturer.fromMap(modelAsMap);
+          success = await manufacturerService.update(updatedEntity);
+          break;
+        case 'PC':
+          updatedEntity = PC.fromMap(modelAsMap);
+          success = await pcService.update(updatedEntity);
+          break;
+        default:
+          break;
+      }
+    } catch (e) {
+      errorMessage = e.toString();
+      success = false;
     }
 
     if (success) {
       await _loadItems();
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Item updated successfully!')),
+          const SnackBar(
+            content: Text('Item updated successfully!'),
+            backgroundColor: Colors.green,
+          ),
         );
       }
       _closeForm();
     } else {
       if (mounted) {
-        ScaffoldMessenger.of(
-          context,
-        ).showSnackBar(const SnackBar(content: Text('Update failed!')));
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(errorMessage != null 
+              ? 'Update failed: $errorMessage' 
+              : 'Update failed!'),
+            backgroundColor: Colors.red,
+            duration: const Duration(seconds: 5),
+          ),
+        );
       }
     }
   }

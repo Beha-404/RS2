@@ -62,5 +62,6 @@ class PowerSupply {
     'name': name,
     'power': power,
     'manufacturerId': manufacturerId,
+    'stateMachine': stateMachine,
   };
 }

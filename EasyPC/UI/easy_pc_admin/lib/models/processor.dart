@@ -80,5 +80,6 @@ class Processor {
     'threadCount': threadCount,
     'coreCount': coreCount,
     'manufacturerId': manufacturerId,
+    'stateMachine': stateMachine,
   };
 }

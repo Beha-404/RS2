@@ -256,7 +256,7 @@ namespace EasyPC.Services.Migrations
                     b.Property<int>("ProcessorId")
                         .HasColumnType("int");
 
-                    b.Property<int>("PsuId")
+                    b.Property<int>("PowerSupplyId")
                         .HasColumnType("int");
 
                     b.Property<int>("RamId")
@@ -284,7 +284,7 @@ namespace EasyPC.Services.Migrations
 
                     b.HasIndex("ProcessorId");
 
-                    b.HasIndex("PsuId");
+                    b.HasIndex("PowerSupplyId");
 
                     b.HasIndex("RamId");
 
@@ -642,7 +642,7 @@ namespace EasyPC.Services.Migrations
 
                     b.HasOne("EasyPC.Services.Database.PowerSupply", "PowerSupply")
                         .WithMany()
-                        .HasForeignKey("PsuId")
+                        .HasForeignKey("PowerSupplyId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 

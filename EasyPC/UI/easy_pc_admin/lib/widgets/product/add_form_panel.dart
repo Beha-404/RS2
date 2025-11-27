@@ -105,7 +105,9 @@ class _AddFormPanelState extends State<AddFormPanel> {
 
   @override
   Widget build(BuildContext context) {
-    final fields = widget.model.keys.where((key) => key != 'id').toList();
+    final fields = widget.model.keys
+        .where((key) => key != 'id' && key != 'available' && key != 'stateMachine')
+        .toList();
 
     return Padding(
       padding: const EdgeInsets.all(32),

@@ -3,6 +3,7 @@ import 'package:desktop/config/config.dart';
 import 'package:desktop/models/motherboard.dart';
 import 'package:desktop/providers/user_provider.dart';
 import 'package:desktop/utils/auth_helper.dart';
+import 'package:desktop/utils/error_parser.dart';
 import 'package:http/http.dart' as http;
 
 class MotherboardService {
@@ -36,13 +37,13 @@ class MotherboardService {
     final uri = Uri.parse('$apiBaseUrl/api/motherboard/insert');
     final response = await http.post(
       uri,
-      headers: AuthHelper.getAuthHeaders(userProvider),
+      headers: {...AuthHelper.getAuthHeaders(userProvider), 'Content-Type': 'application/json'},
       body: jsonEncode(request.toMap()),
     );
     if (response.statusCode == 200) {
       return true;
     } else {
-      throw Exception('Failed to create motherboard');
+      throw Exception(ErrorParser.parseHttpError(response));
     }
   }
 
@@ -60,13 +61,13 @@ class MotherboardService {
     final uri = Uri.parse('$apiBaseUrl/api/motherboard/update/${request.id}');
     final response = await http.put(
       uri,
-      headers: AuthHelper.getAuthHeaders(userProvider),
+      headers: {...AuthHelper.getAuthHeaders(userProvider), 'Content-Type': 'application/json'},
       body: jsonEncode(request.toMap()),
     );
     if (response.statusCode == 200) {
       return true;
     } else {
-      throw Exception('Failed to update motherboard');
+      throw Exception(ErrorParser.parseHttpError(response));
     }
   }
 

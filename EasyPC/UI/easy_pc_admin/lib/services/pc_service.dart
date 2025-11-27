@@ -3,6 +3,7 @@ import 'package:desktop/config/config.dart';
 import 'package:desktop/models/pc.dart';
 import 'package:desktop/providers/user_provider.dart';
 import 'package:desktop/utils/auth_helper.dart';
+import 'package:desktop/utils/error_parser.dart';
 import 'package:http/http.dart' as http;
 
 class PcService {
@@ -45,7 +46,7 @@ class PcService {
     if (response.statusCode == 200) {
       return true;
     } else {
-      throw Exception('Failed to create pc');
+      throw Exception(ErrorParser.parseHttpError(response));
     }
   }
 
@@ -69,7 +70,7 @@ class PcService {
     if (response.statusCode == 200) {
       return true;
     } else {
-      throw Exception('Failed to update pc');
+      throw Exception(ErrorParser.parseHttpError(response));
     }
   }
 

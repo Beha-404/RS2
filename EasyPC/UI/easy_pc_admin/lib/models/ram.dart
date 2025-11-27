@@ -62,5 +62,6 @@ class Ram {
     'name': name,
     'speed': speed,
     'manufacturerId': manufacturerId,
+    'stateMachine': stateMachine,
   };
 }

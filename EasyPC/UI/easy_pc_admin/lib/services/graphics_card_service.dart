@@ -3,6 +3,7 @@ import 'package:desktop/config/config.dart';
 import 'package:desktop/models/graphics_card.dart';
 import 'package:desktop/providers/user_provider.dart';
 import 'package:desktop/utils/auth_helper.dart';
+import 'package:desktop/utils/error_parser.dart';
 import 'package:http/http.dart' as http;
 
 class GraphicsCardService {
@@ -37,13 +38,13 @@ class GraphicsCardService {
     final uri = Uri.parse('$apiBaseUrl/api/graphicscard/insert');
     final response = await http.post(
       uri,
-      headers: AuthHelper.getAuthHeaders(userProvider),
+      headers: {...AuthHelper.getAuthHeaders(userProvider), 'Content-Type': 'application/json'},
       body: jsonEncode(request.toJson()),
     );
     if (response.statusCode == 200) {
       return true;
     } else {
-      throw Exception('Failed to create graphics card');
+      throw Exception(ErrorParser.parseHttpError(response));
     }
   }
 
@@ -61,13 +62,13 @@ class GraphicsCardService {
     final uri = Uri.parse('$apiBaseUrl/api/graphicscard/update/${request.id}');
     final response = await http.put(
       uri,
-      headers: AuthHelper.getAuthHeaders(userProvider),
+      headers: {...AuthHelper.getAuthHeaders(userProvider), 'Content-Type': 'application/json'},
       body: jsonEncode(request.toJson()),
     );
     if (response.statusCode == 200) {
       return true;
     } else {
-      throw Exception('Failed to update graphics card');
+      throw Exception(ErrorParser.parseHttpError(response));
     }
   }
 

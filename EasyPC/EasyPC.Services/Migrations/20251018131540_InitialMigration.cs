@@ -222,7 +222,7 @@ namespace EasyPC.Services.Migrations
                     RamId = table.Column<int>(type: "int", nullable: false),
                     CaseId = table.Column<int>(type: "int", nullable: false),
                     MotherBoardId = table.Column<int>(type: "int", nullable: false),
-                    PsuId = table.Column<int>(type: "int", nullable: false),
+                    PowerSupplyId = table.Column<int>(type: "int", nullable: false),
                     GraphicsCardId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
@@ -247,8 +247,8 @@ namespace EasyPC.Services.Migrations
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
-                        name: "FK_PCs_PowerSupplies_PsuId",
-                        column: x => x.PsuId,
+                        name: "FK_PCs_PowerSupplies_PowerSupplyId",
+                        column: x => x.PowerSupplyId,
                         principalTable: "PowerSupplies",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
@@ -302,9 +302,9 @@ namespace EasyPC.Services.Migrations
                 column: "ProcessorId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_PCs_PsuId",
+                name: "IX_PCs_PowerSupplyId",
                 table: "PCs",
-                column: "PsuId");
+                column: "PowerSupplyId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_PCs_RamId",

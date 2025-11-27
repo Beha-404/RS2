@@ -51,7 +51,7 @@ namespace EasyPC.Services.Database
 
                         entity.HasOne(p => p.PowerSupply)
                         .WithMany()
-                        .HasForeignKey(p => p.PsuId)
+                        .HasForeignKey(p => p.PowerSupplyId)
                         .OnDelete(DeleteBehavior.Restrict);
 
                         entity.HasOne(p => p.Case)

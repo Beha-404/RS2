@@ -63,5 +63,6 @@ class Case {
     'name': name,
     'formFactor': formFactor,
     'manufacturerId': manufacturerId,
+    'stateMachine': stateMachine,
   };
 }

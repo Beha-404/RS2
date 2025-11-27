@@ -34,6 +34,10 @@ namespace EasyPC.API.Controllers
         [HttpPost("insert")]
         public ActionResult<Model.Order?> Insert([FromBody] OrderInsertRequest insert)
         {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
             var result = _service.Insert(insert);
             return Ok(result);
         }
@@ -41,6 +45,10 @@ namespace EasyPC.API.Controllers
         [HttpPut("update/{id}")]
         public ActionResult<Model.Order?> Update(int id, [FromBody] OrderDetailsUpdateRequest updateRequest)
         {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
             var result = _service.Update(id, updateRequest);
             return Ok(result);
         }

@@ -23,9 +23,14 @@ namespace EasyPC.API.Controllers
 
         [Authorize]
         [HttpPost("insert-custom")]
-        public Model.PC? InsertCustomPc([FromBody]PcInsertRequest insertRequest)
+        public IActionResult InsertCustomPc([FromBody]PcInsertRequest insertRequest)
         {
-            return _service.Insert(insertRequest);
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+            var result = _service.Insert(insertRequest);
+            return Ok(result);
         }
     }
 }

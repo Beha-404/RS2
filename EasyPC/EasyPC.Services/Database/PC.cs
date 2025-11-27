@@ -33,8 +33,8 @@ public class PC
     public int MotherBoardId { get; set; }
     [ForeignKey(nameof(MotherBoardId))]
     public virtual Motherboard? MotherBoard { get; set; }
-    public int PsuId { get; set; }
-    [ForeignKey(nameof(PsuId))]
+    public int PowerSupplyId { get; set; }
+    [ForeignKey(nameof(PowerSupplyId))]
     public  PowerSupply? PowerSupply { get; set; }
     public int GraphicsCardId { get; set; }
     [ForeignKey(nameof(GraphicsCardId))]
