@@ -1,8 +1,12 @@
 import 'package:easy_pc/models/manufacturer.dart';
 import 'package:easy_pc/models/pc_type.dart';
+import 'package:easy_pc/pages/login_page.dart';
+import 'package:easy_pc/providers/user_provider.dart';
 import 'package:easy_pc/services/manufacturer_service.dart';
 import 'package:easy_pc/services/pc_type_service.dart';
+import 'package:easy_pc/widgets/dialog/custom_pc_builder_dialog.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 const yellow = Color(0xFFDDC03D);
 
@@ -442,11 +446,7 @@ class _FilterDialogState extends State<FilterDialog> {
           child: ElevatedButton(
             onPressed: () {
               Navigator.pop(context);
-              ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(
-                  content: Text('Build Your Own PC - Coming Soon!'),
-                ),
-              );
+              _showCustomPcBuilder(context);
             },
             style: ElevatedButton.styleFrom(
               backgroundColor: yellow.withValues(alpha: 0.2),
@@ -497,5 +497,35 @@ class _FilterDialogState extends State<FilterDialog> {
       _selectedCaseManufacturerId = null;
       _priceRange = const RangeValues(0, 5000);
     });
+  }
+
+  void _showCustomPcBuilder(BuildContext context) {
+    final userProvider = Provider.of<UserProvider>(context, listen: false);
+    
+    if (userProvider.user == null) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Row(
+            children: const [
+              Icon(Icons.warning, color: Colors.white),
+              SizedBox(width: 12),
+              Expanded(
+                child: Text('Please login or register to build a custom PC'),
+              ),
+            ],
+          ),
+          backgroundColor: Colors.grey[850],
+          behavior: SnackBarBehavior.floating,
+          duration: const Duration(seconds: 3),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(12),
+          ),
+          margin: const EdgeInsets.all(16),
+        ),
+      );
+      return;
+    }
+    
+    CustomPcBuilderDialog.show(context);
   }
 }

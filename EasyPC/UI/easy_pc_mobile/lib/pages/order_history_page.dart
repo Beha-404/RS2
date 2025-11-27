@@ -18,6 +18,8 @@ class OrderHistoryPage extends StatefulWidget {
 class _OrderHistoryPageState extends State<OrderHistoryPage> {
   List<Order> _orders = [];
   bool _loading = false;
+  int _currentPage = 1;
+  final int _pageSize = 5;
 
   @override
   void initState() {
@@ -55,8 +57,15 @@ class _OrderHistoryPageState extends State<OrderHistoryPage> {
         userProvider.user!.id!,
         username: username,
         password: password,
+        page: _currentPage,
+        pageSize: _pageSize,
       );
-      setState(() => _orders = orders);
+      
+      if (mounted) {
+        setState(() {
+          _orders = orders;
+        });
+      }
     } catch (e) {
       if (mounted) {
         ScaffoldMessenger.of(
@@ -86,9 +95,16 @@ class _OrderHistoryPageState extends State<OrderHistoryPage> {
       ),
       body: _loading
           ? const Center(child: CircularProgressIndicator(color: yellow))
-          : _orders.isEmpty
-          ? _buildEmptyState()
-          : _buildOrdersList(),
+          : Column(
+              children: [
+                Expanded(
+                  child: _orders.isEmpty
+                      ? _buildEmptyState()
+                      : _buildOrdersList(),
+                ),
+                _buildPagination(),
+              ],
+            ),
     );
   }
 
@@ -124,7 +140,57 @@ class _OrderHistoryPageState extends State<OrderHistoryPage> {
       child: ListView.builder(
         padding: const EdgeInsets.all(16),
         itemCount: _orders.length,
-        itemBuilder: (context, index) => _buildOrderCard(_orders[index], index + 1),
+        itemBuilder: (context, index) {
+          final displayIndex = (_currentPage - 1) * _pageSize + index + 1;
+          return _buildOrderCard(_orders[index], displayIndex);
+        },
+      ),
+    );
+  }
+
+  Widget _buildPagination() {
+    final hasNextPage = _orders.length == _pageSize;
+    
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+      decoration: BoxDecoration(
+        color: const Color(0xFF2A2A2A),
+        border: const Border(top: BorderSide(color: Colors.white12)),
+      ),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          IconButton(
+            onPressed: _currentPage > 1
+                ? () {
+                    setState(() => _currentPage--);
+                    _loadOrders();
+                  }
+                : null,
+            icon: const Icon(Icons.chevron_left),
+            color: _currentPage > 1 ? yellow : Colors.grey,
+          ),
+          const SizedBox(width: 16),
+          Text(
+            'Page $_currentPage',
+            style: const TextStyle(
+              color: Colors.white,
+              fontSize: 16,
+              fontWeight: FontWeight.w600,
+            ),
+          ),
+          const SizedBox(width: 16),
+          IconButton(
+            onPressed: hasNextPage
+                ? () {
+                    setState(() => _currentPage++);
+                    _loadOrders();
+                  }
+                : null,
+            icon: const Icon(Icons.chevron_right),
+            color: hasNextPage ? yellow : Colors.grey,
+          ),
+        ],
       ),
     );
   }

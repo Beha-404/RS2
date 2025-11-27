@@ -124,4 +124,19 @@ class PcService {
       throw Exception('Failed to load recommendations: ${response.statusCode}');
     }
   }
+
+  Future<PC?> insertCustomPc(Map<String, dynamic> pcData, {Map<String, String>? headers}) async {
+    final uri = Uri.parse('$apiBaseUrl/api/pc/insert-custom');
+    final response = await http.post(
+      uri,
+      headers: headers ?? {'Content-Type': 'application/json'},
+      body: jsonEncode(pcData),
+    );
+    if (response.statusCode == 200) {
+      final json = jsonDecode(response.body);
+      return PC.fromJson(json);
+    } else {
+      throw Exception('Failed to create custom PC: ${response.statusCode}');
+    }
+  }
 }

@@ -20,5 +20,12 @@ namespace EasyPC.API.Controllers
         {
             return _service.Recommend(id);
         }
+
+        [Authorize]
+        [HttpPost("insert-custom")]
+        public Model.PC? InsertCustomPc([FromBody]PcInsertRequest insertRequest)
+        {
+            return _service.Insert(insertRequest);
+        }
     }
 }

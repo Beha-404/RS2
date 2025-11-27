@@ -35,8 +35,14 @@ class OrderService {
     int userId, {
     required String username,
     required String password,
+    int page = 1,
+    int pageSize = 5,
   }) async {
-    final queryParams = {'UserId': userId.toString()};
+    final queryParams = {
+      'UserId': userId.toString(),
+      'Page': page.toString(),
+      'PageSize': pageSize.toString(),
+    };
     
     final uri = Uri.parse('$apiBaseUrl/api/order/get')
         .replace(queryParameters: queryParams);
