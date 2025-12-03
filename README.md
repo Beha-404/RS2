@@ -9,9 +9,26 @@ EasyPC is an advanced multi-platform application for building and purchasing com
 
 The mobile application is launched via emulator: Pixel_9a, or via your own device.
 
----
+## EasyPC - Build Your Dream PC
 
-## 🎯 Key Features
+EasyPC is a multi-platform application for building and purchasing computers with a desktop app (Flutter), mobile app (Flutter), web app (Angular), and recommendation system.
+
+## 🚀 Features
+
+### 💻 Desktop Application (Flutter)
+- Admin panel for product management
+- **Compatibility Checker** UI
+- **Build Wizard** interface
+- User and order management
+- Real-time support chat (SignalR)
+- PDF reports
+
+### 📱 Mobile Application (Flutter)
+- Browse PC configurations
+- **Compatibility Checker** (mobile-optimized)
+- **Build Wizard** (vertical stepper)
+- Shopping cart and ordering
+- User profile
 
 ### 🔧 **Compatibility Checker**
 - Automatic component compatibility verification
@@ -36,33 +53,6 @@ The mobile application is launched via emulator: Pixel_9a, or via your own devic
 - Smart component filtering
 - Save & Order functionality
 
----
-
-## EasyPC - Build Your Dream PC
-
-EasyPC is a multi-platform application for building and purchasing computers with a desktop app (Flutter), mobile app (Flutter), web app (Angular), and recommendation system.
-
-## 🚀 Features
-
-### 💻 Desktop Application (Flutter)
-- Admin panel for product management
-- **Compatibility Checker** UI
-- **Build Wizard** interface
-- User and order management
-- Real-time support chat (SignalR)
-- PDF reports
-
-### 📱 Mobile Application (Flutter)
-- Browse PC configurations
-- **Compatibility Checker** (mobile-optimized)
-- **Build Wizard** (vertical stepper)
-- Shopping cart and ordering
-- User profile
-
-### 🤖 Recommendation System (Coming soon)
-- Machine learning PC recommendations
-- User preference analysis
-- Personalized suggestions
 
 ## 🛠️ Technologies
 
@@ -149,16 +139,6 @@ The application automatically creates seed data on first run:
 ## 📄 License
 
 MIT License
-
----
-
-## 👨‍💻 Author
-
-**Behadin Kovačević**  
-International Burch University  
-Software Development II - 2024/2025
-
----
 
 ⭐ **Difference from classic e-commerce projects:**
 - ✅ Automatic compatibility verification
