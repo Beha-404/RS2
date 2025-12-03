@@ -9,37 +9,37 @@ namespace EasyPC.Model.Requests.PcRequests
 {
     public class PcInsertRequest
     {
-        [Required(ErrorMessage = "Naziv računara je obavezan")]
-        [MinLength(2, ErrorMessage = "Naziv mora imati najmanje 2 karaktera")]
-        [MaxLength(100, ErrorMessage = "Naziv ne može imati više od 100 karaktera")]
+        [Required(ErrorMessage = "PC name is required")]
+        [MinLength(2, ErrorMessage = "Name must have at least 2 characters")]
+        [MaxLength(100, ErrorMessage = "Name cannot exceed 100 characters")]
         public required string Name { get; set; }
 
-        [Required(ErrorMessage = "Tip računara je obavezan")]
-        [Range(1, int.MaxValue, ErrorMessage = "Morate izabrati tip računara")]
+        [Required(ErrorMessage = "PC type is required")]
+        [Range(1, int.MaxValue, ErrorMessage = "You must select a PC type")]
         public required int PcTypeId { get; set; }
 
-        [Required(ErrorMessage = "Procesor je obavezan")]
-        [Range(1, int.MaxValue, ErrorMessage = "Morate izabrati procesor")]
+        [Required(ErrorMessage = "Processor is required")]
+        [Range(1, int.MaxValue, ErrorMessage = "You must select a processor")]
         public required int ProcessorId { get; set; }
 
-        [Required(ErrorMessage = "RAM je obavezan")]
-        [Range(1, int.MaxValue, ErrorMessage = "Morate izabrati RAM")]
+        [Required(ErrorMessage = "RAM is required")]
+        [Range(1, int.MaxValue, ErrorMessage = "You must select RAM")]
         public required int RamId { get; set; }
 
-        [Required(ErrorMessage = "Kućište je obavezno")]
-        [Range(1, int.MaxValue, ErrorMessage = "Morate izabrati kućište")]
+        [Required(ErrorMessage = "Case is required")]
+        [Range(1, int.MaxValue, ErrorMessage = "You must select a case")]
         public required int CaseId { get; set; }
 
-        [Required(ErrorMessage = "Matična ploča je obavezna")]
-        [Range(1, int.MaxValue, ErrorMessage = "Morate izabrati matičnu ploču")]
+        [Required(ErrorMessage = "Motherboard is required")]
+        [Range(1, int.MaxValue, ErrorMessage = "You must select a motherboard")]
         public required int MotherBoardId { get; set; }
 
-        [Required(ErrorMessage = "Napajanje je obavezno")]
-        [Range(1, int.MaxValue, ErrorMessage = "Morate izabrati napajanje")]
+        [Required(ErrorMessage = "Power supply is required")]
+        [Range(1, int.MaxValue, ErrorMessage = "You must select a power supply")]
         public required int PowerSupplyId { get; set; }
 
-        [Required(ErrorMessage = "Grafička kartica je obavezna")]
-        [Range(1, int.MaxValue, ErrorMessage = "Morate izabrati grafičku karticu")]
+        [Required(ErrorMessage = "Graphics card is required")]
+        [Range(1, int.MaxValue, ErrorMessage = "You must select a graphics card")]
         public required int GraphicsCardId { get; set; }
     }
 }

@@ -9,14 +9,14 @@ namespace EasyPC.Model.Requests.ManufacturerRequests
 {
     public class ManufacturerInsertRequest
     {
-        [Required(ErrorMessage = "Naziv proizvođača je obavezan")]
-        [MinLength(2, ErrorMessage = "Naziv mora imati najmanje 2 karaktera")]
-        [MaxLength(100, ErrorMessage = "Naziv ne može imati više od 100 karaktera")]
+        [Required(ErrorMessage = "Manufacturer name is required")]
+        [MinLength(2, ErrorMessage = "Name must have at least 2 characters")]
+        [MaxLength(100, ErrorMessage = "Name cannot exceed 100 characters")]
         public required string Name { get; set; }
 
-        [Required(ErrorMessage = "Tip komponente je obavezan")]
-        [MinLength(2, ErrorMessage = "Tip komponente mora imati najmanje 2 karaktera")]
-        [MaxLength(50, ErrorMessage = "Tip komponente ne može imati više od 50 karaktera")]
+        [Required(ErrorMessage = "Component type is required")]
+        [MinLength(2, ErrorMessage = "Component type must have at least 2 characters")]
+        [MaxLength(50, ErrorMessage = "Component type cannot exceed 50 characters")]
         public required string ComponentType { get; set; }
     }
 }

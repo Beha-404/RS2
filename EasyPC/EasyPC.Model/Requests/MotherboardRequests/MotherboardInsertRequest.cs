@@ -9,22 +9,22 @@ namespace EasyPC.Model.Requests.MotherboardRequests
 {
     public class MotherboardInsertRequest
     {
-        [Required(ErrorMessage = "Naziv matične ploče je obavezan")]
-        [MinLength(2, ErrorMessage = "Naziv mora imati najmanje 2 karaktera")]
-        [MaxLength(100, ErrorMessage = "Naziv ne može imati više od 100 karaktera")]
+        [Required(ErrorMessage = "Motherboard name is required")]
+        [MinLength(2, ErrorMessage = "Name must have at least 2 characters")]
+        [MaxLength(100, ErrorMessage = "Name cannot exceed 100 characters")]
         public required string Name { get; set; }
 
-        [Required(ErrorMessage = "Socket je obavezan")]
-        [MinLength(2, ErrorMessage = "Socket mora imati najmanje 2 karaktera")]
-        [MaxLength(50, ErrorMessage = "Socket ne može imati više od 50 karaktera")]
+        [Required(ErrorMessage = "Socket is required")]
+        [MinLength(2, ErrorMessage = "Socket must have at least 2 characters")]
+        [MaxLength(50, ErrorMessage = "Socket cannot exceed 50 characters")]
         public required string Socket { get; set; }
 
-        [Required(ErrorMessage = "Cijena je obavezna")]
-        [Range(1, int.MaxValue, ErrorMessage = "Cijena mora biti veća od 0")]
+        [Required(ErrorMessage = "Price is required")]
+        [Range(1, int.MaxValue, ErrorMessage = "Price must be greater than 0")]
         public required int Price { get; set; }
 
-        [Required(ErrorMessage = "Proizvođač je obavezan")]
-        [Range(1, int.MaxValue, ErrorMessage = "Morate izabrati proizvođača")]
+        [Required(ErrorMessage = "Manufacturer is required")]
+        [Range(1, int.MaxValue, ErrorMessage = "You must select a manufacturer")]
         public required int ManufacturerId { get; set; }
     }
 }

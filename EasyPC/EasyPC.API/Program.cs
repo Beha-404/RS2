@@ -100,6 +100,10 @@ builder.Services.AddTransient<IPcService, PcService>();
 builder.Services.AddTransient<IOrderService, OrderService>();
 builder.Services.AddTransient<IRatingService, RatingService>();
 
+// New services for Build Wizard and Compatibility Checker
+builder.Services.AddScoped<CompatibilityService>();
+builder.Services.AddScoped<BuildWizardService>();
+
 builder.Services.AddTransient<InitialCaseStateMachine>();
 builder.Services.AddTransient<DraftCaseStateMachine>();
 builder.Services.AddTransient<ActiveCaseStateMachine>();

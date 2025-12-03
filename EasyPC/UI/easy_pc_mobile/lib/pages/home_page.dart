@@ -461,8 +461,8 @@ class _HomePageState extends State<HomePage> {
   }
 
   Widget _dotsIndicator() {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 4),
+    return const Padding(
+      padding: EdgeInsets.symmetric(horizontal: 4),
       child: Text(
         '...',
         style: TextStyle(
@@ -495,15 +495,9 @@ class _HomePageState extends State<HomePage> {
 
  Widget _filterButton() {
   return ConstrainedBox(
-    constraints: const BoxConstraints(maxWidth: 150),
-    child: ElevatedButton.icon(
+    constraints: const BoxConstraints(maxWidth: 170),
+    child: ElevatedButton(
       onPressed: _showFilterDialog,
-      icon: const Icon(Icons.tune, color: Colors.black),
-      label: const Text(
-        'FILTER PCS',
-        overflow: TextOverflow.ellipsis,
-        style: TextStyle(color: Colors.black, fontWeight: FontWeight.w700),
-      ),
       style: ElevatedButton.styleFrom(
         backgroundColor: yellow,
         foregroundColor: Colors.black,
@@ -512,9 +506,30 @@ class _HomePageState extends State<HomePage> {
         minimumSize: const Size(0, 40),
         tapTargetSize: MaterialTapTargetSize.shrinkWrap,
       ),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: const [
+          Icon(Icons.tune, color: Colors.black, size: 18),
+          SizedBox(width: 6),
+          Expanded(
+            child: Text(
+              'FILTER / BUILD',
+              overflow: TextOverflow.ellipsis,
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                color: Colors.black,
+                fontWeight: FontWeight.w700,
+                fontSize: 13,
+              ),
+            ),
+          ),
+        ],
+      ),
     ),
   );
 }
+
+
 
   Future<void> _showFilterDialog() async {
     final filters = await showDialog<Map<String, dynamic>>(

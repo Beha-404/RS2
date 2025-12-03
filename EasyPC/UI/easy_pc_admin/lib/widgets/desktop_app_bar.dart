@@ -1,3 +1,5 @@
+import 'package:desktop/pages/build_wizard_page.dart';
+import 'package:desktop/pages/compatibility_checker_page.dart';
 import 'package:desktop/pages/login_page.dart';
 import 'package:desktop/pages/orders_page.dart';
 import 'package:desktop/pages/product_page.dart';
@@ -43,6 +45,10 @@ class DesktopAppBar extends StatelessWidget implements PreferredSizeWidget {
           ),
           const Spacer(),
           _buildNavButton(context, 'Products', 'productsIcon.png'),
+          const SizedBox(width: 36),
+          _buildNavButton(context, 'Build Wizard', 'productsIcon.png'),
+          const SizedBox(width: 36),
+          _buildNavButton(context, 'Compatibility', 'productsIcon.png'),
           const SizedBox(width: 36),
           _buildNavButton(context, 'Support', 'supportIcon.png'),
           const SizedBox(width: 36),
@@ -95,6 +101,12 @@ class DesktopAppBar extends StatelessWidget implements PreferredSizeWidget {
             switch (label) {
               case 'Products':
                 route = const ProductPage();
+                break;
+              case 'Build Wizard':
+                route = const BuildWizardPage();
+                break;
+              case 'Compatibility':
+                route = const CompatibilityCheckerPage();
                 break;
               case 'Support':
                 route = const SupportPage();

@@ -1,9 +1,13 @@
+import 'dart:convert';
 import 'package:easy_pc/models/manufacturer.dart';
 import 'package:easy_pc/models/pc_type.dart';
 import 'package:easy_pc/providers/user_provider.dart';
+import 'package:easy_pc/providers/cart_provider.dart';
 import 'package:easy_pc/services/manufacturer_service.dart';
 import 'package:easy_pc/services/pc_type_service.dart';
-import 'package:easy_pc/widgets/dialog/custom_pc_builder_dialog.dart';
+import 'package:easy_pc/services/pc_service.dart';
+import 'package:easy_pc/pages/build_wizard_page.dart';
+import 'package:easy_pc/pages/login_page.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -85,8 +89,6 @@ class _FilterDialogState extends State<FilterDialog> {
         manufacturerService.getByComponentType('CASE'),
         pcTypeService.get(),
       ]);
-
-      print('Loaded manufacturers: $results');
 
       setState(() {
         _cpuManufacturers = results[0] as List<Manufacturer>;
@@ -443,10 +445,7 @@ class _FilterDialogState extends State<FilterDialog> {
         SizedBox(
           width: double.infinity,
           child: ElevatedButton(
-            onPressed: () {
-              Navigator.pop(context);
-              _showCustomPcBuilder(context);
-            },
+            onPressed: _showCustomPcBuilder,
             style: ElevatedButton.styleFrom(
               backgroundColor: yellow.withValues(alpha: 0.2),
               foregroundColor: yellow,
@@ -498,7 +497,7 @@ class _FilterDialogState extends State<FilterDialog> {
     });
   }
 
-  void _showCustomPcBuilder(BuildContext context) {
+  void _showCustomPcBuilder() async {
     final userProvider = Provider.of<UserProvider>(context, listen: false);
     
     if (userProvider.user == null) {
@@ -520,11 +519,92 @@ class _FilterDialogState extends State<FilterDialog> {
             borderRadius: BorderRadius.circular(12),
           ),
           margin: const EdgeInsets.all(16),
+          action: SnackBarAction(
+            label: 'LOGIN',
+            textColor: yellow,
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (_) => const LoginPage()),
+              );
+            },
+          ),
         ),
       );
       return;
     }
     
-    CustomPcBuilderDialog.show(context);
+    final wizardState = await Navigator.push(
+      context,
+      MaterialPageRoute(builder: (_) => const BuildWizardPage()),
+    );
+
+    if (wizardState != null && context.mounted) {
+      Navigator.pop(context);
+      
+      try {
+        final userProvider = Provider.of<UserProvider>(context, listen: false);
+        final username = userProvider.user?.username ?? '';
+        final password = userProvider.password ?? '';
+        final credentials = base64Encode(utf8.encode('$username:$password'));
+        
+        final pcData = {
+          'name': 'Custom PC Build',
+          'pcTypeId': wizardState.pcTypeId,
+          'processorId': wizardState.processorId,
+          'ramId': wizardState.ramId,
+          'caseId': wizardState.caseId,
+          'motherBoardId': wizardState.motherboardId,
+          'powerSupplyId': wizardState.powerSupplyId,
+          'graphicsCardId': wizardState.graphicsCardId,
+        };
+        
+        final customPc = await const PcService().insertCustomPc(
+          pcData,
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': 'Basic $credentials',
+          },
+        );
+        
+        if (customPc != null && context.mounted) {
+          final cartProvider = Provider.of<CartProvider>(context, listen: false);
+          
+          cartProvider.addItem(
+            customPc.id!,
+            customPc.name ?? 'Custom PC Build',
+            customPc.price ?? wizardState.estimatedPrice ?? 0,
+            customPc.picture,
+          );
+
+          ScaffoldMessenger.of(context).clearSnackBars();
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: const Row(
+                children: [
+                  Icon(Icons.check_circle, color: Colors.white),
+                  SizedBox(width: 12),
+                  Expanded(child: Text('Custom PC added to cart')),
+                ],
+              ),
+              backgroundColor: Colors.grey[850],
+              behavior: SnackBarBehavior.floating,
+              duration: const Duration(seconds: 3),
+              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+              margin: const EdgeInsets.all(16),
+            ),
+          );
+        }
+      } catch (e) {
+        if (context.mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text('Failed to create custom PC: $e'),
+              backgroundColor: Colors.red,
+            ),
+          );
+        }
+      }
+    }
   }
 }
