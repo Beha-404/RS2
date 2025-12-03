@@ -1,73 +1,73 @@
 # EasyPC - Intelligent PC Building Platform
-**Razvoj softvera II - Seminarski rad**
+**Software Development II - Seminar Project**
 
-EasyPC je napredna višeplatformska aplikacija za izgradnju i kupovinu računara sa inteligentnim sistemom za provjeru kompatibilnosti i korak-po-korak wizard-om za konfiguraciju računara.
+EasyPC is an advanced multi-platform application for building and purchasing computers with an intelligent compatibility checking system and a step-by-step wizard for PC configuration.
 
-**Login podaci:**
-- Desktop app: `admin` / `admin123` ili `superadmin` / `superadmin123`
+**Login Credentials:**
+- Desktop app: `admin` / `admin123` or `superadmin` / `superadmin123`
 - Mobile app: `user1` / `user123`
 
-Mobilna aplikacija je pokrenuta preko emulatora: Pixel_9a, ili preko svog uređaja.
+The mobile application is launched via emulator: Pixel_9a, or via your own device.
 
 ---
 
-## 🎯 Ključne Karakteristike
+## 🎯 Key Features
 
 ### 🔧 **Compatibility Checker**
-- Automatska provjera kompatibilnosti komponenti
+- Automatic component compatibility verification
 - Socket matching (CPU ↔ Motherboard)
-- Form factor validacija (Motherboard ↔ Case)
-- Provjera snage napajanja
-- Bottleneck detection (CPU/GPU balans)
-- Scoring sistem (0-100 bodova)
-- Vizuelne preporuke i upozorenja
+- Form factor validation (Motherboard ↔ Case)
+- Power supply verification
+- Bottleneck detection (CPU/GPU balance)
+- Scoring system (0-100 points)
+- Visual recommendations and warnings
 
 ### 🧙 **Build Wizard**
-- 7-koračni vodič za izgradnju računara
-  1. Tip računara (Gaming, Office, Workstation)
-  2. Procesor (filtriran po tipu PC-a)
-  3. Matična ploča (kompatibilni socket-i)
-  4. RAM (optimalne brzine)
-  5. Grafička karta (balansirana sa CPU-om)
-  6. Napajanje (preporučena snaga)
-  7. Kućište (kompatibilni form factor)
-- Real-time kompatibilnost check
-- Dinamička kalkulacija cijene
-- Pametno filtriranje komponenti
-- Save & Order funkcionalnost
+- 7-step guide for building a PC
+  1. PC Type (Gaming, Office, Workstation)
+  2. Processor (filtered by PC type)
+  3. Motherboard (compatible sockets)
+  4. RAM (optimal speeds)
+  5. Graphics Card (balanced with CPU)
+  6. Power Supply (recommended wattage)
+  7. Case (compatible form factors)
+- Real-time compatibility check
+- Dynamic price calculation
+- Smart component filtering
+- Save & Order functionality
 
 ---
 
 ## EasyPC - Build Your Dream PC
 
-EasyPC je višeplatformska aplikacija za izgradnju i kupovinu računara sa desktop aplikacijom (WPF), mobilnom aplikacijom (Flutter/MAUI), web aplikacijom (Angular) i recommendation sistemom.
+EasyPC is a multi-platform application for building and purchasing computers with a desktop app (Flutter), mobile app (Flutter), web app (Angular), and recommendation system.
 
-## 🚀 Funkcionalnosti
+## 🚀 Features
 
-### 💻 Desktop Aplikacija (Flutter)
-- Admin panel za upravljanje proizvodima
+### 💻 Desktop Application (Flutter)
+- Admin panel for product management
 - **Compatibility Checker** UI
 - **Build Wizard** interface
-- Upravljanje korisnicima i narudžbama
+- User and order management
 - Real-time support chat (SignalR)
-- PDF izvještaji
+- PDF reports
 
-### 📱 Mobilna Aplikacija (Flutter)
-- Pregledanje PC konfiguracija
+### 📱 Mobile Application (Flutter)
+- Browse PC configurations
 - **Compatibility Checker** (mobile-optimized)
 - **Build Wizard** (vertical stepper)
-- Korpa i naručivanje
-- Korisnički profil
+- Shopping cart and ordering
+- User profile
 
 ### 🤖 Recommendation System (Coming soon)
-- Machine learning preporuke računara
-- Analiza korisničkih preferencija
-- Personalizovane sugestije
+- Machine learning PC recommendations
+- User preference analysis
+- Personalized suggestions
 
-## 🛠️ Tehnologije
+## 🛠️ Technologies
 
-| Layer | Tehnologija |
-|-------|-------------|
+| Layer | Technology |
+|-------|------------|
 | **Backend** | .NET 9, ASP.NET Core Web API |
 | **Database** | SQL Server 2022, Entity Framework Core |
 | **Authentication** | JWT Tokens, Basic Auth |
@@ -76,28 +76,28 @@ EasyPC je višeplatformska aplikacija za izgradnju i kupovinu računara sa deskt
 | **Desktop & Mobile** | Flutter 3.x, Dart |
 | **Containerization** | Docker, Docker Compose |
 
-## 📦 Instalacija i Pokretanje
+## 📦 Installation and Setup
 
-### 1. Docker (Preporučeno)
+### 1. Docker (Recommended)
 ```bash
 cd EasyPC
 docker-compose up -d --build
 ```
-**Servisi:**
+**Services:**
 - API: `http://localhost:5285`
 - SQL Server: `localhost:1433`
 - RabbitMQ: `localhost:15672` (guest/guest)
 
-### 2. Desktop Aplikacija
+### 2. Desktop Application
 ```bash
 cd UI/easy_pc_admin
 flutter pub get
 flutter run -d windows
 ```
 
-**Login:** `admin` / `admin123` ili `superadmin` / `superadmin123`
+**Login:** `admin` / `admin123` or `superadmin` / `superadmin123`
 
-### 3. Mobilna Aplikacija
+### 3. Mobile Application
 ```bash
 cd UI/easy_pc_mobile
 flutter pub get
@@ -108,62 +108,62 @@ flutter run
 
 ---
 
-## 🎮 Kako Koristiti
+## 🎮 How to Use
 
 ### Compatibility Checker
-1. Kliknite na "Compatibility" u navigaciji
-2. Odaberite komponente iz dropdown menija
-3. Kliknite "Check Compatibility"
-4. Pregled rezultata:
-   - ✅ **Zeleno:** Sve kompatibilno
-   - ⚠️ **Narandžasto:** Upozorenja
-   - ❌ **Crveno:** Nekompatibilno
+1. Click on "Compatibility" in navigation
+2. Select components from dropdown menus
+3. Click "Check Compatibility"
+4. Review results:
+   - ✅ **Green:** All compatible
+   - ⚠️ **Orange:** Warnings
+   - ❌ **Red:** Incompatible
 
 ### Build Wizard
-1. Kliknite na "Build Wizard" u navigaciji
-2. Pratite 7 koraka
-3. Odaberite komponentu iz liste
-4. Pregledajte real-time cijenu
-5. Na kraju: "Save Build"
+1. Click on "Build Wizard" in navigation
+2. Follow the 7 steps
+3. Select a component from the list
+4. Review real-time price
+5. At the end: "Save Build"
 
-## 🗄️ Seed Podaci
+## 🗄️ Seed Data
 
-Aplikacija automatski kreira seed podatke pri prvom pokretanju:
+The application automatically creates seed data on first run:
 
-| Tip | Username | Password |
-|-----|----------|----------|
+| Type | Username | Password |
+|------|----------|----------|
 | Desktop Admin | `admin` | `admin123` |
 | Super Admin | `superadmin` | `superadmin123` |
 | Mobile User | `user1` | `user123` |
 
-**Seed komponente:**
-- 10+ Procesora (Intel i5/i7/i9, AMD Ryzen 5/7/9)
-- 10+ Matičnih ploča (ASUS, MSI, Gigabyte)
-- 8+ RAM modula (Corsair, Kingston, G.Skill)
-- 10+ Grafičkih kartica (NVIDIA RTX, AMD Radeon)
-- 6+ Napajanja (Corsair, EVGA - 550W-850W)
-- 6+ Kućišta (NZXT, Corsair - ATX, MicroATX, Mini-ITX)
+**Seed components:**
+- 10+ Processors (Intel i5/i7/i9, AMD Ryzen 5/7/9)
+- 10+ Motherboards (ASUS, MSI, Gigabyte)
+- 8+ RAM modules (Corsair, Kingston, G.Skill)
+- 10+ Graphics Cards (NVIDIA RTX, AMD Radeon)
+- 6+ Power Supplies (Corsair, EVGA - 550W-850W)
+- 6+ Cases (NZXT, Corsair - ATX, MicroATX, Mini-ITX)
 
 ---
 
-## 📄 Licenca
+## 📄 License
 
 MIT License
 
 ---
 
-## 👨‍💻 Autor
+## 👨‍💻 Author
 
 **Behadin Kovačević**  
-Internacionalni Univerzitet Burch  
-Razvoj softvera II - 2024/2025
+International Burch University  
+Software Development II - 2024/2025
 
 ---
 
-⭐ **Razlika od klasičnog e-prodaja projekta:**
-- ✅ Automatska provjera kompatibilnosti
-- ✅ Intelligent Build Wizard sa 7 koraka
-- ✅ Real-time filtering baziran na prethodnim izborima
+⭐ **Difference from classic e-commerce projects:**
+- ✅ Automatic compatibility verification
+- ✅ Intelligent Build Wizard with 7 steps
+- ✅ Real-time filtering based on previous choices
 - ✅ Bottleneck detection
-- ✅ Scoring sistem kompatibilnosti
-- ✅ Preporuke za napajanje i balans komponenti
+- ✅ Compatibility scoring system
+- ✅ Power supply and component balance recommendations
